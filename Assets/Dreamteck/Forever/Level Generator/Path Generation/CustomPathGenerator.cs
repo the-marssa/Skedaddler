@@ -1,118 +1,102 @@
+using UnityEngine;
+using Dreamteck.Splines;
+
 namespace Dreamteck.Forever
 {
-    using UnityEngine;
-    using Dreamteck.Splines;
-
+    [AddComponentMenu("Dreamteck/Forever/Path Generators/Custom Path Generator")]
     public class CustomPathGenerator : LevelPathGenerator
     {
-        public bool loop = false;
-        public bool useRelativeCoordinates = false;
-        public int segmentCount = 10;
-        int currentSegmentIndex = 0;
-        Matrix4x4 trsMatrix = new Matrix4x4();
-        [HideInInspector]
-        public SplinePoint[] points = new SplinePoint[0];
-        public Spline.Type customPathType
-        {
-            get { return _spline.type; }
-            set { _spline.type = value; }
-        }
-        public int customPathSampleRate
-        {
-            get { return _spline.sampleRate; }
-            set { _spline.sampleRate = value; }
-        }
-        [UnityEngine.Serialization.FormerlySerializedAs("spline")]
-        [SerializeField] private Spline _spline = new Spline(Spline.Type.CatmullRom, 10);
-        SplineSample[] samples = new SplineSample[0];
-        float pathLength = 0f;
+        [Header("Path points (optional)")]
+        [SerializeField] private string entryName = "Entry";
+        [SerializeField] private string exitName = "Exit";
 
-        public override void Initialize(LevelGenerator input)
+        [Header("Orientation")]
+        [SerializeField] private bool keepUpright = true;
+        [SerializeField] private bool overrideUp = false;
+        [SerializeField] private Vector3 upOverride = Vector3.up;
+
+        [Header("Safety")]
+        [SerializeField] private float minStraightLength = 0.01f;
+
+        public override void Initialize(LevelGenerator generator)
         {
-            base.Initialize(input);
-            currentSegmentIndex = 0;
-            CreateSpline();
-            if (useRelativeCoordinates) SetTRS();
+            base.Initialize(generator);
+            LevelGenerator.onSegmentCreated += OnSegmentCreated;
         }
 
-        public override void Continue(LevelPathGenerator previousGenerator)
+        private void OnDestroy()
         {
-            base.Continue(previousGenerator);
-            currentSegmentIndex = 0;
-            CreateSpline();
-            if (useRelativeCoordinates) SetTRS();
+            LevelGenerator.onSegmentCreated -= OnSegmentCreated;
         }
 
-        void CreateSpline()
+        private void OnSegmentCreated(LevelSegment segment)
         {
-            _spline = new Spline(customPathType, customPathSampleRate);
-            _spline.points = points;
-            if (loop) _spline.Close();
-            pathLength = _spline.CalculateLength();
-            float travel = pathLength / (_spline.iterations - 1);
-            samples = new SplineSample[_spline.iterations];
-            samples[0] = _spline.Evaluate(0.0);
-            for (int i = 1; i < _spline.iterations - 1; i++)
+            // Генерируем прямую без деформации геометрии
+            BuildStraightPath(segment);
+        }
+
+        private void BuildStraightPath(LevelSegment segment)
+        {
+            // 1) Пытаемся найти Entry/Exit
+            Transform entry = FindPoint(segment.transform, entryName);
+            Transform exit = FindPoint(segment.transform, exitName);
+
+            Vector3 a, b;
+
+            if (entry != null && exit != null)
             {
-                samples[i] = _spline.Evaluate(_spline.Travel(samples[i - 1].percent, travel, Spline.Direction.Forward));
+                a = entry.position;
+                b = exit.position;
             }
-            samples[_spline.iterations - 1] = _spline.Evaluate(1.0);
+            else
+            {
+                // 2) Фоллбек — от краёв bounds по оси сегмента
+                var bounds = segment.GetBounds(); // TS_Bounds
+                var t = segment.transform;
+
+                switch (segment.axis)
+                {
+                    case LevelSegment.Axis.X:
+                        a = t.TransformPoint(new Vector3(-bounds.size.x * 0.5f, 0f, 0f));
+                        b = t.TransformPoint(new Vector3(bounds.size.x * 0.5f, 0f, 0f));
+                        break;
+                    case LevelSegment.Axis.Y:
+                        a = t.TransformPoint(new Vector3(0f, -bounds.size.y * 0.5f, 0f));
+                        b = t.TransformPoint(new Vector3(0f, bounds.size.y * 0.5f, 0f));
+                        break;
+                    default: // Z
+                        a = t.TransformPoint(new Vector3(0f, 0f, -bounds.size.z * 0.5f));
+                        b = t.TransformPoint(new Vector3(0f, 0f, bounds.size.z * 0.5f));
+                        break;
+                }
+            }
+
+            // Страховка от нулевой длины
+            if ((b - a).sqrMagnitude < minStraightLength * minStraightLength)
+                b = a + Vector3.forward * minStraightLength;
+
+            Vector3 forward = (b - a).normalized;
+            Vector3 up = overrideUp ? upOverride : (keepUpright ? Vector3.up : Vector3.up);
+
+            // 3) Записываем выборки напрямую (без spline.Rebuild и т.п.)
+            if (segment.path.samples == null || segment.path.samples.Length != 2)
+                segment.path.samples = new SplineSample[2];
+
+            segment.path.samples[0] = new SplineSample(a, up, forward, Color.white, 1f, 0.0);
+            segment.path.samples[1] = new SplineSample(b, up, forward, Color.white, 1f, 1.0);
+
+            // Важно: обнуляем ссылку на spline, чтобы Forever использовал samples как есть
+            segment.path.spline = null;
         }
 
-        void SetTRS()
+        private Transform FindPoint(Transform root, string name)
         {
-            if (LevelGenerator.instance.segments.Count > 0)
-            {
-                SplineSample result = new SplineSample();
-                LevelGenerator.instance.Evaluate(1.0, ref result);
-                trsMatrix.SetTRS(transform.InverseTransformPoint(result.position), Quaternion.Inverse(transform.rotation) * result.rotation, Vector3.one);
-            }
-            else trsMatrix.SetTRS(Vector3.zero, Quaternion.identity, Vector3.one);
-        }
+            if (string.IsNullOrEmpty(name)) return null;
 
-        void Evaluate(double percent, ref SplineSample result)
-        {
-            if (samples.Length == 0) return;
-            percent = DMath.Clamp01(percent);
-            int index = DMath.FloorInt(percent * (samples.Length - 1));
-            double percentExcess = (samples.Length - 1) * percent - index;
-            result = samples[index];
-            if (percentExcess > 0.0 && index < samples.Length - 1) result.Lerp(ref samples[index + 1], percentExcess);
-            if (useRelativeCoordinates)
-            {
-                result.position = trsMatrix.MultiplyPoint3x4(result.position);
-                result.forward = trsMatrix.MultiplyVector(result.forward);
-                result.up = trsMatrix.MultiplyVector(result.up);
-            }
-        }
-
-        protected override void OnPostGeneration(SplinePoint[] points)
-        {
-            base.OnPostGeneration(points);
-            double range = 1.0 / segmentCount;
-            int loopedSegmentIndex = currentSegmentIndex % segmentCount;
-            double from = range * loopedSegmentIndex;
-            double to = range * (loopedSegmentIndex + 1);
-            SplineSample result = new SplineSample();
-            for (int i = 0; i < points.Length; i++)
-            {
-                double percent = DMath.Lerp(from, to, (double)i / (points.Length - 1));
-                Evaluate(percent, ref result);
-                points[i].position = result.position;
-                points[i].tangent2 = result.forward;
-                points[i].normal = result.up;
-                points[i].size = result.size;
-                points[i].color = result.color;
-            }
-            for (int i = 0; i < points.Length; i++)
-            {
-                float pointDistance = 0f;
-                if (i == 0) pointDistance = Vector3.Distance(points[i].position, points[i + 1].position);
-                else pointDistance = Vector3.Distance(points[i].position, points[i - 1].position);
-                points[i].tangent2 = points[i].position + points[i].tangent2 * pointDistance / 3f;
-                points[i].tangent = points[i].position + (points[i].position - points[i].tangent2);
-            }
-            currentSegmentIndex++;
+            // Часто ноды лежат в корне или под "Path/"
+            var t = root.Find(name);
+            if (t == null) t = root.Find("Path/" + name);
+            return t;
         }
     }
 }

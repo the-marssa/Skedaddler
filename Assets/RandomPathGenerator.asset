@@ -17,11 +17,29 @@ MonoBehaviour:
   controlPointsPerSegment: 5
   normalInterpolation:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  customNormalInterpolation: 0
+  customNormalInterpolation: 1
   valueInterpolation:
     serializedVersion: 2
     m_Curve: []
@@ -32,7 +50,7 @@ MonoBehaviour:
   useCustomNormalDirection: 0
   customNormalDirection: {x: 0, y: 1, z: 0}
   startOrientation: {x: 0, y: 0, z: 0}
-  randomizer: {fileID: 0}
+  randomizer: {fileID: 11400000, guid: fb600be43607d7e47822c78754644d57, type: 2}
   restrictPitch: 1
   restrictYaw: 1
   restrictRoll: 0

@@ -13,16 +13,9 @@ MonoBehaviour:
   m_Name: RandomPathGenerator
   m_EditorClassIdentifier: 
   pathType: 2
-  sampleRate: 5
-  controlPointsPerSegment: 4
+  sampleRate: 160
+  controlPointsPerSegment: 8
   normalInterpolation:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  customNormalInterpolation: 0
-  valueInterpolation:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -32,8 +25,8 @@ MonoBehaviour:
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 1
@@ -41,30 +34,37 @@ MonoBehaviour:
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  customValueInterpolation: 1
+  customNormalInterpolation: 1
+  valueInterpolation:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  customValueInterpolation: 0
   useCustomNormalDirection: 0
   customNormalDirection: {x: 0, y: 1, z: 0}
   startOrientation: {x: 0, y: 0, z: 0}
-  randomizer: {fileID: 11400000, guid: d856acc0e92435345a3ae0cb58b7ef9d, type: 2}
+  randomizer: {fileID: 11400000, guid: fb600be43607d7e47822c78754644d57, type: 2}
   restrictPitch: 1
   restrictYaw: 1
-  restrictRoll: 1
+  restrictRoll: 0
   usePitch: 1
   useYaw: 1
   useRoll: 0
   useColors: 0
   useSizes: 0
-  minOrientation: {x: -5, y: -85, z: -30}
-  maxOrientation: {x: 45, y: 85, z: 30}
-  minRandomStep: {x: 5, y: 10, z: 2}
-  maxRandomStep: {x: 10, y: 30, z: 10}
-  minTurnRate: {x: 5, y: 5, z: 2}
-  maxTurnRate: {x: 5, y: 5, z: 2}
+  minOrientation: {x: -45, y: -90, z: 0}
+  maxOrientation: {x: 45, y: 90, z: 0}
+  minRandomStep: {x: 0.8, y: 3, z: 0}
+  maxRandomStep: {x: 3, y: 5, z: 0}
+  minTurnRate: {x: 1.5, y: 8, z: 0}
+  maxTurnRate: {x: 3, y: 15, z: 0}
   startTargetOrientation: {x: 0, y: 0, z: 0}
   useStartPitchTarget: 0
   useStartYawTarget: 0
@@ -96,6 +96,7 @@ MonoBehaviour:
     atime6: 0
     atime7: 0
     m_Mode: 0
+    m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
   maxColor:
@@ -125,53 +126,18 @@ MonoBehaviour:
     atime6: 0
     atime7: 0
     m_Mode: 0
+    m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
   minSize:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.9524994
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0.9524994
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+    m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   maxSize:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.5
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0.5
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+    m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4

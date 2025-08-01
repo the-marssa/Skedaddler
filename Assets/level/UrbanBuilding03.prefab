@@ -184,7 +184,6 @@ GameObject:
   - component: {fileID: 7309732413069282323}
   - component: {fileID: 2761506909439051432}
   - component: {fileID: 4859093315984784394}
-  - component: {fileID: 7305529868411350327}
   - component: {fileID: 5389971705172880586}
   - component: {fileID: 1336860059977723863}
   m_Layer: 0
@@ -202,8 +201,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1563867831784358591}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -264,40 +263,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7305529868411350327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1563867831784358591}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1f119face70eef45923442a053ff451, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pathParent: {fileID: 4482443713561587722}
-  manager: {fileID: 0}
-  objectRoot: {fileID: 0}
-  collectibleTransform: {fileID: 0}
-  possibleObstacles:
-  - m_AssetGUID: b19a0bd8ede69fe4683dff84150a047b
-    m_SubObjectName: 
-    m_SubObjectGUID: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
-  - m_AssetGUID: d9056217b765e1b4893238b9e7ebddbc
-    m_SubObjectName: 
-    m_SubObjectGUID: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
-  - m_AssetGUID: f0070c0f7d7cdcb4eb7176be4a87caa9
-    m_SubObjectName: 
-    m_SubObjectGUID: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
-  obstaclePositions:
-  - 0.5
 --- !u!54 &5389971705172880586
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -359,6 +324,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -374,6 +340,8 @@ MonoBehaviour:
     meshFilter: {fileID: 2761506909439051432}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 1
   - transform: {fileID: 7046733817282855787}
@@ -390,6 +358,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -405,6 +374,8 @@ MonoBehaviour:
     meshFilter: {fileID: 0}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 14461517031882778}
@@ -421,6 +392,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -436,6 +408,8 @@ MonoBehaviour:
     meshFilter: {fileID: 2412715091958692125}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 6774859380209611421}
@@ -452,6 +426,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -467,10 +442,12 @@ MonoBehaviour:
     meshFilter: {fileID: 8831094015348152251}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 3602547225046414974}
-    localRotation: {x: -0, y: 1, z: 0, w: 0}
+    localRotation: {x: 0, y: 1, z: -0, w: 0}
     extrudedMesh: {fileID: 0}
     extrusionSpriteVertices: []
     extrusionSpriteUVs: []
@@ -483,6 +460,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -498,10 +476,12 @@ MonoBehaviour:
     meshFilter: {fileID: 4899927956326593438}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 2291730627221155600}
-    localRotation: {x: -0, y: 1, z: 0, w: 0}
+    localRotation: {x: 0, y: 1, z: -0, w: 0}
     extrudedMesh: {fileID: 0}
     extrusionSpriteVertices: []
     extrusionSpriteUVs: []
@@ -514,6 +494,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -529,6 +510,8 @@ MonoBehaviour:
     meshFilter: {fileID: 6420344815722726773}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 2240085643884638473}
@@ -545,6 +528,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -560,10 +544,12 @@ MonoBehaviour:
     meshFilter: {fileID: 163416868733083269}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 1212126456370344517}
-    localRotation: {x: -0, y: 0.7071068, z: 0, w: 0.7071068}
+    localRotation: {x: 0, y: 0.7071068, z: -0, w: 0.7071068}
     extrudedMesh: {fileID: 0}
     extrusionSpriteVertices: []
     extrusionSpriteUVs: []
@@ -576,6 +562,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -591,6 +578,8 @@ MonoBehaviour:
     meshFilter: {fileID: 1542581883484380090}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 5944175563680731236}
@@ -607,6 +596,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -622,10 +612,12 @@ MonoBehaviour:
     meshFilter: {fileID: 8758193605095923940}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 8769740573060163781}
-    localRotation: {x: -0, y: 0.7071068, z: 0, w: 0.7071068}
+    localRotation: {x: 0, y: 0.7071068, z: -0, w: 0.7071068}
     extrudedMesh: {fileID: 0}
     extrusionSpriteVertices: []
     extrusionSpriteUVs: []
@@ -638,6 +630,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -653,6 +646,8 @@ MonoBehaviour:
     meshFilter: {fileID: 3587120841496432493}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 3150712276119442933}
@@ -669,6 +664,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -684,6 +680,8 @@ MonoBehaviour:
     meshFilter: {fileID: 5561011390637662295}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 6919956218263675162}
@@ -700,6 +698,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -715,10 +714,12 @@ MonoBehaviour:
     meshFilter: {fileID: 8537416033950888921}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 5743300607819840285}
-    localRotation: {x: -0, y: 0.7014349, z: 0, w: 0.71273357}
+    localRotation: {x: 0, y: 0.7014349, z: -0, w: 0.71273357}
     extrudedMesh: {fileID: 0}
     extrusionSpriteVertices: []
     extrusionSpriteUVs: []
@@ -731,6 +732,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -746,6 +748,8 @@ MonoBehaviour:
     meshFilter: {fileID: 2056535273632694934}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 634227570493978938}
@@ -762,6 +766,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -777,10 +782,12 @@ MonoBehaviour:
     meshFilter: {fileID: 0}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 1930747344713546298}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 4405940522786900539}
-    localRotation: {x: -0, y: 0.7071068, z: 0, w: 0.7071068}
+    localRotation: {x: 0, y: 0.7071068, z: -0, w: 0.7071068}
     extrudedMesh: {fileID: 0}
     extrusionSpriteVertices: []
     extrusionSpriteUVs: []
@@ -793,6 +800,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -808,10 +816,12 @@ MonoBehaviour:
     meshFilter: {fileID: 0}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 1918743637038247465}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 7969641919518995717}
-    localRotation: {x: -0, y: 0.7071068, z: 0, w: 0.7071068}
+    localRotation: {x: 0, y: 0.7071068, z: -0, w: 0.7071068}
     extrudedMesh: {fileID: 0}
     extrusionSpriteVertices: []
     extrusionSpriteUVs: []
@@ -824,6 +834,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -839,6 +850,8 @@ MonoBehaviour:
     meshFilter: {fileID: 0}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 2004992462499165173}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 1336581991152476418}
@@ -855,6 +868,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -870,10 +884,12 @@ MonoBehaviour:
     meshFilter: {fileID: 4091270155980294785}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 8393706428683437108}
-    localRotation: {x: -0, y: 0.5658634, z: 0, w: 0.8244991}
+    localRotation: {x: 0, y: 0.5658634, z: -0, w: 0.8244991}
     extrudedMesh: {fileID: 0}
     extrusionSpriteVertices: []
     extrusionSpriteUVs: []
@@ -886,6 +902,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -901,6 +918,8 @@ MonoBehaviour:
     meshFilter: {fileID: 7789199271816883023}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 5311058777943590406}
@@ -917,6 +936,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -932,6 +952,8 @@ MonoBehaviour:
     meshFilter: {fileID: 2967906887893874886}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 4482443713561587722}
@@ -948,6 +970,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -963,6 +986,8 @@ MonoBehaviour:
     meshFilter: {fileID: 0}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 1614198676231614146}
@@ -979,6 +1004,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -994,6 +1020,8 @@ MonoBehaviour:
     meshFilter: {fileID: 0}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   - transform: {fileID: 639641298728669055}
@@ -1010,6 +1038,7 @@ MonoBehaviour:
     extrudedCollisionMesh: {fileID: 0}
     _extrusionSettings:
       meshColliderHandling: 0
+      bendSpline: 0
       boundsInclusion: -1
       indexing: 0
       applyRotation: 1
@@ -1025,6 +1054,8 @@ MonoBehaviour:
     meshFilter: {fileID: 0}
     meshCollider: {fileID: 0}
     spriteRenderer: {fileID: 0}
+    splineComputer: {fileID: 0}
+    editSplinePoints: []
     colliders: []
     _isRoot: 0
   bounds:
@@ -1771,6 +1802,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4482443713561587722}
+  - component: {fileID: 5789682486044868896}
+  - component: {fileID: 4579595473565371883}
   m_Layer: 0
   m_Name: Path
   m_TagString: Untagged
@@ -1795,6 +1828,110 @@ Transform:
   - {fileID: 639641298728669055}
   m_Father: {fileID: 7309732413069282323}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5789682486044868896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7251926096058507078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8abf799a17be8264daa9759d95e6de99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  updateMethod: 0
+  _spline: {fileID: 4579595473565371883}
+  _autoUpdate: 1
+  _rotationModifier:
+    blend: 1
+    useClippedPercent: 0
+    keys: []
+  _offsetModifier:
+    blend: 1
+    useClippedPercent: 0
+    keys: []
+  _colorModifier:
+    blend: 1
+    useClippedPercent: 0
+    keys: []
+  _sizeModifier:
+    blend: 1
+    useClippedPercent: 0
+    keys: []
+  _clipFromSample:
+    position: {x: 0, y: 0, z: 0}
+    up: {x: 0, y: 0, z: 0}
+    forward: {x: 0, y: 0, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+    size: 0
+    percent: 0
+  _clipToSample:
+    position: {x: 0, y: 0, z: 0}
+    up: {x: 0, y: 0, z: 0}
+    forward: {x: 0, y: 0, z: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+    size: 0
+    percent: 0
+  _loopSamples: 0
+  _clipFrom: 0
+  _clipTo: 1
+  animClipFrom: 0
+  animClipTo: 1
+  multithreaded: 0
+  buildOnAwake: 1
+  buildOnEnable: 0
+--- !u!114 &4579595473565371883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7251926096058507078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 598e68924c9f6324bbfd049d3bae754c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  editorDrawPivot: 1
+  editorPathColor: {r: 1, g: 1, b: 1, a: 1}
+  editorAlwaysDraw: 0
+  editorDrawThickness: 0
+  editorBillboardThickness: 1
+  isNewlyCreated: 0
+  editorUpdateMode: 0
+  multithreaded: 0
+  updateMode: 0
+  triggerGroups: []
+  _spline:
+    points: []
+    type: 3
+    linearAverageDirection: 1
+    customValueInterpolation:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    customNormalInterpolation:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    sampleRate: 10
+    closed: 0
+    _knotParametrization: 0
+  _originalSamplePercents: []
+  _is2D: 0
+  hasSamples: 0
+  _optimizeAngleThreshold: 0.5
+  _space: 1
+  _sampleMode: 0
+  _subscribers:
+  - {fileID: 5789682486044868896}
+  _rawSamples: []
+  _nodes: []
 --- !u!1 &7273793422652707158
 GameObject:
   m_ObjectHideFlags: 0
