@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6e46c704493a0428ba19af679948755c
+timeCreated: 1461638165
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61516
+  packageName: OnScreenControls
+  packageVersion: 1.0
+  assetPath: Assets/OnScreenControls/Scene/Demo-GameKid.unity
+  uploadId: 163151

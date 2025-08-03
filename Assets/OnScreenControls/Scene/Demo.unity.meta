@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6f3623559c845438aa76e332fecb5061
+timeCreated: 1462239230
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61516
+  packageName: OnScreenControls
+  packageVersion: 1.0
+  assetPath: Assets/OnScreenControls/Scene/Demo.unity
+  uploadId: 163151

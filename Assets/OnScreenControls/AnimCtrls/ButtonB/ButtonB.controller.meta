@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 09c3d925256f648b6b117254f1dc8f0f
+timeCreated: 1479618072
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61516
+  packageName: OnScreenControls
+  packageVersion: 1.0
+  assetPath: Assets/OnScreenControls/AnimCtrls/ButtonB/ButtonB.controller
+  uploadId: 163151

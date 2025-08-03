@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e906556a48e2e4288bebbe9344481ccb
+timeCreated: 1479618072
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61516
+  packageName: OnScreenControls
+  packageVersion: 1.0
+  assetPath: Assets/OnScreenControls/AnimCtrls/ButtonSubmit/ButtonSubmit.controller
+  uploadId: 163151

@@ -1357,11 +1357,11 @@ MonoBehaviour:
     colliders: []
     _isRoot: 0
   bounds:
-    center: {x: 0.071201324, y: 11.988535, z: 0.0000014305115}
-    extents: {x: 38.099174, y: 13.371487, z: 4.5000014}
-    max: {x: 38.170376, y: 25.360022, z: 4.500003}
-    min: {x: -38.027973, y: -1.3829516, z: -4.5}
-    size: {x: 76.19835, y: 26.742973, z: 9.000003}
+    center: {x: 0.071201324, y: 11.988536, z: 0.0000014305115}
+    extents: {x: 38.099194, y: 13.371493, z: 4.500004}
+    max: {x: 38.170395, y: 25.36003, z: 4.5000052}
+    min: {x: -38.027992, y: -1.3829575, z: -4.5000024}
+    size: {x: 76.19839, y: 26.742987, z: 9.000008}
   builders: []
   unpacked: 0
   alwaysDraw: 0
@@ -1528,7 +1528,7 @@ Transform:
   m_GameObject: {fileID: 4618393425807012235}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
