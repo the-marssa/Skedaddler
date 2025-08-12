@@ -1,25 +1,19 @@
 using UnityEngine;
+using System;
 
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance { get; private set; }
+    public int Score { get; private set; }
+    public event Action<int> Changed;
 
-    [Header("Score")]
-    [SerializeField, Min(0)] private int startScore = 0;
-    [SerializeField, Min(0)] private int score;
-
-    public int Score => score;
-
-    private void Awake()
+    void Awake()
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        if (Instance != null) { Destroy(gameObject); return; }
         Instance = this;
-        score = startScore;
-        // DontDestroyOnLoad(gameObject); // enable if you need persistence
+        DontDestroyOnLoad(gameObject);
     }
 
-    public void Add(int value)
-    {
-        score += Mathf.Max(0, value);
-    }
+    public void Add(int amount) { Score += amount; Changed?.Invoke(Score); }
+    public void ResetScore() { Score = 0; Changed?.Invoke(Score); }
 }

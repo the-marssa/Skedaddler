@@ -4170,6 +4170,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3738380083972485341}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: 58219e8eced12ce4c9723796d507d515,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8703688712120866047}
   m_SourcePrefab: {fileID: 100100000, guid: 58219e8eced12ce4c9723796d507d515, type: 3}
 --- !u!4 &2561957148280696525 stripped
 Transform:
@@ -4220,6 +4224,21 @@ MonoBehaviour:
   clipName: 
   playerTag: Player
   onlyOnce: 1
+  disableColliderOnPlay: 1
+  reEnableDelay: 1.5
+--- !u!114 &8703688712120866047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2561957148280795885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6e72994e8cc1bd4c8a2c4595aebf749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
 --- !u!33 &2561957148284120813 stripped
 MeshFilter:
   m_CorrespondingSourceObject: {fileID: 3300000, guid: 58219e8eced12ce4c9723796d507d515,
@@ -4304,6 +4323,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 246068723463494673}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: bbccc718107e16e4d9e070aa75df5218,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6437984954786838370}
   m_SourcePrefab: {fileID: 100100000, guid: bbccc718107e16e4d9e070aa75df5218, type: 3}
 --- !u!111 &5352187270264056707 stripped
 Animation:
@@ -4360,6 +4383,21 @@ MonoBehaviour:
   clipName: 
   playerTag: Player
   onlyOnce: 1
+  disableColliderOnPlay: 1
+  reEnableDelay: 1.5
+--- !u!114 &6437984954786838370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5352187270270825027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6e72994e8cc1bd4c8a2c4595aebf749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
 --- !u!33 &5352187270272118339 stripped
 MeshFilter:
   m_CorrespondingSourceObject: {fileID: 3300000, guid: bbccc718107e16e4d9e070aa75df5218,

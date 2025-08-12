@@ -26,7 +26,7 @@ public class Collectable : MonoBehaviour
         if (!other.CompareTag("Player")) return;
 
         if (type == CollectableType.Health && other.TryGetComponent(out PlayerHealth hp))
-            hp.AddHealth(value);
+            hp.Heal(value);
         else if (type == CollectableType.Score)
             ScoreManager.Instance?.Add(value);
 

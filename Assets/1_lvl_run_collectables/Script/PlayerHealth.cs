@@ -1,22 +1,40 @@
 using UnityEngine;
+using System;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [Header("Health")]
-    [SerializeField, Min(1)] private int maxHealth = 5;
-    [SerializeField, Tooltip("Current health for debugging/UI.")] private int current;
+    [SerializeField] int maxHP = 3;
+    [SerializeField] float hitCooldown = 0.5f;
 
-    public int MaxHealth => maxHealth;
-    public int Current => current;
+    public int Current { get; private set; }
+    public int Max => maxHP;
 
-    private void Awake()
+    public event Action<int, int> Changed;
+    public event Action Died;
+
+    float lastHit = -999f;
+
+    void Awake() { Current = maxHP; }
+
+    public void TakeDamage(int amount)
     {
-        current = Mathf.Clamp(current, 0, maxHealth);
-        if (current == 0) current = maxHealth; // start full if not set
+        if (Time.time - lastHit < hitCooldown || Current <= 0) return;
+        lastHit = Time.time;
+        Current = Mathf.Max(0, Current - amount);
+        Changed?.Invoke(Current, maxHP);
+        if (Current == 0) Died?.Invoke();
     }
 
-    public void AddHealth(int amount)
+    public void Heal(int amount)
     {
-        current = Mathf.Clamp(current + amount, 0, maxHealth);
+        if (Current <= 0) return;
+        Current = Mathf.Min(maxHP, Current + amount);
+        Changed?.Invoke(Current, maxHP);
     }
+    public void ResetHP()
+    {
+        Current = Max;
+        Changed?.Invoke(Current, Max);
+    }
+
 }
