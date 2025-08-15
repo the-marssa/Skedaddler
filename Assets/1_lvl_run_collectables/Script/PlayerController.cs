@@ -7,9 +7,14 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Runner _runner;
-    [SerializeField] private float _slideSpeed = 3f;
     [SerializeField] private float _joystickSensitivity = 2f;
     [SerializeField] private float _maxOffset = 5f;
+
+    [Header("Smoothing")]
+    [SerializeField] private float _lateralSpeed = 4f;
+    [SerializeField, Range(0.02f, 0.3f)] private float _xSmoothTime = 0.10f;
+    [SerializeField] private float _xMaxSpeed = 100f;
+    [SerializeField, Range(0f, 0.3f)] private float _inputDeadZone = 0.08f;
 
     [Header("Animator")]
     [SerializeField] private Animator _anim;
@@ -31,6 +36,7 @@ public class PlayerController : MonoBehaviour
     private bool _isJumping;
     private bool _controlsLocked;
     private bool _inHit;
+    private float _xVel;
 
     private void Awake()
     {
@@ -65,7 +71,8 @@ public class PlayerController : MonoBehaviour
     private void OnMovePerformed(InputAction.CallbackContext ctx)
     {
         if (_controlsLocked) return;
-        _addValue = ctx.ReadValue<Vector2>().x / _joystickSensitivity;
+        float x = ctx.ReadValue<Vector2>().x;
+        _addValue = (Mathf.Abs(x) < _inputDeadZone) ? 0f : x * _joystickSensitivity;
     }
 
     private void OnMoveCanceled(InputAction.CallbackContext ctx)
@@ -96,22 +103,22 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        _targetX = Mathf.Clamp(_targetX + _addValue, -_maxOffset, _maxOffset);
-        float newX = Mathf.MoveTowards(_runner.motion.offset.x, _targetX, _slideSpeed * Time.deltaTime);
+        _targetX = Mathf.Clamp(
+            _targetX + _addValue * _lateralSpeed * Time.deltaTime,
+            -_maxOffset, _maxOffset
+        );
+
+        float newX = Mathf.SmoothDamp(
+            _runner.motion.offset.x,
+            _targetX,
+            ref _xVel,
+            _xSmoothTime,
+            _xMaxSpeed
+        );
+
         _runner.motion.offset = new Vector2(newX, _verticalOffset);
     }
-
-    private void OnCollisionEnter(Collision c)
-    {
-        if (c.collider.CompareTag("Obstacle")) TryHit();
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Obstacle")) TryHit();
-    }
-
-    private void TryHit()
+    public void TryHit()
     {
         if (_isJumping || _inHit) return;
         if (_anim) _anim.SetTrigger(_hitTrigger);

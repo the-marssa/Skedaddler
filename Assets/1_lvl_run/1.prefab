@@ -2363,10 +2363,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7228068060152580196}
-    - targetCorrespondingSourceObject: {fileID: 100000, guid: 9b635fbb467c2e84f9b8b0d2cc7a19fd,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7632318416303023629}
   m_SourcePrefab: {fileID: 100100000, guid: 9b635fbb467c2e84f9b8b0d2cc7a19fd, type: 3}
 --- !u!111 &5248769713991210884 stripped
 Animation:
@@ -2425,25 +2421,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ab0ce8a6c40ec14b9bfc143493481b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 5248769713991210884}
-  clipName: 
-  playerTag: Player
-  onlyOnce: 1
-  disableColliderOnPlay: 1
-  reEnableDelay: 1.5
---- !u!114 &7632318416303023629
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5248769714002234948}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6e72994e8cc1bd4c8a2c4595aebf749, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   damage: 1
+  animator: {fileID: 0}
+  triggerName: Hit
+  legacyAnimation: {fileID: 5248769713991210884}
+  legacyClipName: 
+  vfx: {fileID: 0}
+  sfx: {fileID: 0}
+  disableAfterHit: 1
+  removeDelay: 1.2
 --- !u!1001 &7625202759710599475
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2528,10 +2514,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8788658809550758939}
-    - targetCorrespondingSourceObject: {fileID: 100000, guid: 89db83d228927234ab3737e12e64660e,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5741065569130191682}
   m_SourcePrefab: {fileID: 100100000, guid: 89db83d228927234ab3737e12e64660e, type: 3}
 --- !u!111 &7625202759700690515 stripped
 Animation:
@@ -2596,25 +2578,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ab0ce8a6c40ec14b9bfc143493481b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 7625202759700690515}
-  clipName: 
-  playerTag: Player
-  onlyOnce: 1
-  disableColliderOnPlay: 1
-  reEnableDelay: 1.5
---- !u!114 &5741065569130191682
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7625202759710633875}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6e72994e8cc1bd4c8a2c4595aebf749, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   damage: 1
+  animator: {fileID: 0}
+  triggerName: Hit
+  legacyAnimation: {fileID: 7625202759700690515}
+  legacyClipName: 
+  vfx: {fileID: 0}
+  sfx: {fileID: 0}
+  disableAfterHit: 1
+  removeDelay: 1.2
 --- !u!4 &7625202759710995377 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 89db83d228927234ab3737e12e64660e,
