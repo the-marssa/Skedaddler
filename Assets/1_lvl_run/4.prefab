@@ -2122,9 +2122,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1b95ee5758f46646a3377cec5faae8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collectablePrefabs:
-  - {fileID: 2458404737753078205, guid: 35590398b83799c459fc888aa13e398d, type: 3}
-  - {fileID: 1036246193485675744, guid: 9bc2076536ad0a749a1bd13d276af469, type: 3}
+  entries:
+  - prefab: {fileID: 1036246193485675744, guid: 9bc2076536ad0a749a1bd13d276af469,
+      type: 3}
+    weight: 0.8
+  - prefab: {fileID: 2458404737753078205, guid: 35590398b83799c459fc888aa13e398d,
+      type: 3}
+    weight: 0.05
+  - prefab: {fileID: 7753728971606300541, guid: 7fdda124fffcc704a9186f3d2715dda1,
+      type: 3}
+    weight: 0.05
+  - prefab: {fileID: 5886910388680056955, guid: 7dcab4bc55595cf4e8c4d2ea118c79b5,
+      type: 3}
+    weight: 0.05
+  - prefab: {fileID: 5103192299624904991, guid: 3965e71e02f85994ba6d3100e9b57560,
+      type: 3}
+    weight: 0.05
   pointsParent: {fileID: 7514650585550226277}
   spawnProbability: 0.5
   yOffset: 0.2

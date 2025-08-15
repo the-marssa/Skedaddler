@@ -135,8 +135,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3abf8ee514e16f745abd8457aa866b5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 0
   value: 1
+  effectSeconds: 5
   rotateSpeed: 90
   pickupVfx: {fileID: 0}
   pickupSfx: {fileID: 0}

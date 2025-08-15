@@ -400,10 +400,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3abf8ee514e16f745abd8457aa866b5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 1
   value: 1
+  effectSeconds: 5
   rotateSpeed: 90
-  pickupVfx: {fileID: 1470639489738500, guid: 9e2b957157514af40870bf65c60ae63f, type: 3}
+  pickupVfx: {fileID: 0}
   pickupSfx: {fileID: 0}
   destroyDelay: 0
 --- !u!4 &2458404737753499037 stripped

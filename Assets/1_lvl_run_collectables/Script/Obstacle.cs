@@ -3,47 +3,59 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class Obstacle : MonoBehaviour
 {
-    [SerializeField] int damage = 1;
+    [SerializeField] private int damage = 1;
 
     [Header("Animator (Manual)")]
-    [SerializeField] Animator animator;
-    [SerializeField] string triggerName = "Hit";
+    [SerializeField] private Animator animator;
+    [SerializeField] private string triggerName = "Hit";
 
     [Header("Legacy Animation (optional)")]
-    [SerializeField] Animation legacyAnimation;
-    [SerializeField] string legacyClipName = "";
+    [SerializeField] private Animation legacyAnimation;
+    [SerializeField] private string legacyClipName = "";
 
     [Header("FX (optional)")]
-    [SerializeField] ParticleSystem vfx;
-    [SerializeField] AudioSource sfx;
+    [SerializeField] private ParticleSystem vfx;
+    [SerializeField] private AudioSource sfx;
 
-    [SerializeField] bool disableAfterHit = true;
-    [SerializeField] float removeDelay = 1.2f;
+    [SerializeField] private bool disableAfterHit = true;
+    [SerializeField] private float removeDelay = 1.2f;
 
-    bool consumed;
+    private bool consumed;
 
-    void Awake()
+    private void Awake()
     {
         if (!animator) animator = GetComponentInChildren<Animator>();
         if (!legacyAnimation) legacyAnimation = GetComponentInChildren<Animation>();
     }
 
-    void OnTriggerEnter(Collider other) { Handle(other); }
-    void OnCollisionEnter(Collision c) { Handle(c.collider); }
+    private void OnTriggerEnter(Collider other) => Handle(other);
+    private void OnCollisionEnter(Collision col) => Handle(col.collider);
 
-    void Handle(Collider col)
+    private void Handle(Collider col)
     {
         if (consumed) return;
 
+        
         var ctrl = col.GetComponentInParent<PlayerController>();
         if (!ctrl) return;
 
+        bool shieldActive = GameRefs.PlayerShield != null && GameRefs.PlayerShield.IsActive;
+
         consumed = true;
 
-        ctrl.TryHit();
-        var hp = ctrl.GetComponent<PlayerHealth>() ?? ctrl.GetComponentInParent<PlayerHealth>();
-        if (hp) hp.TakeDamage(damage);
+        
+        if (!shieldActive)
+        {
+            ctrl.TryHit();
 
+            var hp = GameRefs.PlayerHealth
+                     ?? ctrl.GetComponent<PlayerHealth>()
+                     ?? ctrl.GetComponentInParent<PlayerHealth>();
+
+            if (hp) hp.TakeDamage(damage);
+        }
+
+       
         if (animator && !string.IsNullOrEmpty(triggerName)) animator.SetTrigger(triggerName);
         else if (legacyAnimation)
         {
@@ -54,6 +66,7 @@ public class Obstacle : MonoBehaviour
         if (vfx) vfx.Play();
         if (sfx) sfx.Play();
 
+        
         if (disableAfterHit)
         {
             foreach (var c in GetComponentsInChildren<Collider>()) c.enabled = false;
