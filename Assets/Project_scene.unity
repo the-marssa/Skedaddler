@@ -2096,7 +2096,7 @@ MonoBehaviour:
   _runner: {fileID: 869045002}
   _joystickSensitivity: 1
   _maxOffset: 2
-  _lateralSpeed: 4
+  _lateralSpeed: 10
   _xSmoothTime: 0.1
   _xMaxSpeed: 100
   _inputDeadZone: 0.08

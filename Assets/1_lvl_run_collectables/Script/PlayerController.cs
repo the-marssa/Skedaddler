@@ -1,9 +1,9 @@
 using Dreamteck.Forever;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Runner))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Runner _runner;
@@ -22,8 +22,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private string _hitTrigger = "Hit";
 
     [Header("Jump")]
-    [SerializeField] private float _jumpHeight = 2.4f;
-    [SerializeField] private float _jumpDuration = 0.55f;
+    [SerializeField] private float _jumpHeight = 1.9f;
+    [SerializeField] private float _jumpDuration = 0.8f;
 
     [Header("Hit / Pause forward")]
     [SerializeField] private float _hitLockTime = 1.2f;
@@ -44,15 +44,22 @@ public class PlayerController : MonoBehaviour
         if (_anim == null) _anim = GetComponent<Animator>();
         if (_forwardDriver == null) _forwardDriver = GetComponent<Runner>();
 
+        GameRefs.PlayerController = this;
+
         _inputController = new RunController();
         SubscribeEvents();
 
-        _targetX = _runner ? _runner.motion.offset.x : 0f;
+        _targetX = _runner != null ? _runner.motion.offset.x : 0f;
     }
 
     private void OnEnable() => _inputController.Enable();
     private void OnDisable() => _inputController.Disable();
-    private void OnDestroy() { UnsubscribeEvents(); _inputController.Dispose(); }
+    private void OnDestroy()
+    {
+        UnsubscribeEvents();
+        _inputController.Dispose();
+        if (GameRefs.PlayerController == this) GameRefs.PlayerController = null;
+    }
 
     private void SubscribeEvents()
     {
@@ -78,12 +85,12 @@ public class PlayerController : MonoBehaviour
     private void OnMoveCanceled(InputAction.CallbackContext ctx)
     {
         _addValue = 0f;
-        if (_runner) _targetX = _runner.motion.offset.x;
+        if (_runner != null) _targetX = _runner.motion.offset.x;
     }
 
     private void OnJumpPerformed(InputAction.CallbackContext ctx)
     {
-        if (_anim) _anim.SetTrigger(_jumpTrigger);
+        if (_anim != null) _anim.SetTrigger(_jumpTrigger);
         if (!_isJumping) StartCoroutine(JumpRoutine());
     }
 
@@ -103,6 +110,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (_runner == null) return;
+
         _targetX = Mathf.Clamp(
             _targetX + _addValue * _lateralSpeed * Time.deltaTime,
             -_maxOffset, _maxOffset
@@ -118,10 +127,11 @@ public class PlayerController : MonoBehaviour
 
         _runner.motion.offset = new Vector2(newX, _verticalOffset);
     }
+
     public void TryHit()
     {
         if (_isJumping || _inHit) return;
-        if (_anim) _anim.SetTrigger(_hitTrigger);
+        if (_anim != null) _anim.SetTrigger(_hitTrigger);
         StartCoroutine(HitLock());
     }
 
@@ -131,11 +141,11 @@ public class PlayerController : MonoBehaviour
         _controlsLocked = true;
         _addValue = 0f;
 
-        if (_forwardDriver) _forwardDriver.enabled = false;
+        if (_forwardDriver != null) _forwardDriver.enabled = false;
 
         yield return new WaitForSeconds(_hitLockTime);
 
-        if (_forwardDriver) _forwardDriver.enabled = true;
+        if (_forwardDriver != null) _forwardDriver.enabled = true;
 
         _controlsLocked = false;
         _inHit = false;

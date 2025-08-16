@@ -21,6 +21,7 @@ public class PlayerHealth : MonoBehaviour
     {
         Current = Max;
         GameRefs.PlayerHealth = this;
+        Changed?.Invoke(Current, Max);
     }
 
     private void OnDestroy()
@@ -35,28 +36,44 @@ public class PlayerHealth : MonoBehaviour
 
         lastHit = Time.time;
         Current = Mathf.Max(0, Current - amount);
+
+        
         Changed?.Invoke(Current, Max);
-        if (Current == 0) Died?.Invoke();
+
+        if (Current == 0)
+        {
+            
+            Died?.Invoke();
+           
+            Changed?.Invoke(Current, Max);
+        }
         return true;
     }
 
     public bool Heal(int amount)
     {
         if (amount <= 0 || Current <= 0) return false;
-
         int prev = Current;
-        Current = Mathf.Min(Max, Current + amount); 
+        Current = Mathf.Min(Max, Current + amount);
         if (Current != prev) Changed?.Invoke(Current, Max);
         return Current != prev;
     }
 
     public void ResetHP()
     {
-        Current = Max;       
+        Current = Max;
         lastHit = -999f;
         Changed?.Invoke(Current, Max);
     }
 
+    public void Kill()
+    {
+        if (Current == 0) return;
+        Current = 0;
+        Changed?.Invoke(Current, Max); 
+        Died?.Invoke();                
+        Changed?.Invoke(Current, Max);
+    }
 #if UNITY_EDITOR
     private void OnValidate()
     {

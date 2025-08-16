@@ -3,14 +3,15 @@ using UnityEngine;
 
 public enum CollectableType { Score, Health, Letter, Shield, Magnet }
 
+[RequireComponent(typeof(Collider))]
 public class Collectable : MonoBehaviour
 {
     private const string PlayerTag = "Player";
 
     [Header("Setup")]
     [SerializeField] private CollectableType type = CollectableType.Score;
-    [SerializeField, Min(0)] private int value = 1;      
-    [SerializeField, Min(0f)] private float effectSeconds = 5f; 
+    [SerializeField, Min(0)] private int value = 1;
+    [SerializeField, Min(0f)] private float effectSeconds = 5f;
 
     [Header("Feedback")]
     [SerializeField] private float rotateSpeed = 90f;
@@ -25,17 +26,23 @@ public class Collectable : MonoBehaviour
         if (!_collected && rotateSpeed != 0f)
             transform.Rotate(0f, rotateSpeed * Time.deltaTime, 0f);
 
-      
-        if (!_collected && (type == CollectableType.Score || type == CollectableType.Health || type == CollectableType.Shield))
+        if (_collected) return;
+
+
+        var mag = GameRefs.PlayerMagnet;
+        if (mag != null && mag.IsActive)
         {
-            var mag = GameRefs.PlayerMagnet;
-            if (mag != null && mag.IsActive)
+            Vector3 centerOnPlane = new Vector3(mag.Center.x, transform.position.y, mag.Center.z);
+            Vector3 toCenter = centerOnPlane - transform.position;
+
+            float r = mag.Radius;
+            if (toCenter.sqrMagnitude <= r * r)
             {
-                Vector3 toPlayer = mag.Center - transform.position;
-                if (toPlayer.sqrMagnitude <= mag.Radius * mag.Radius)
-                {
-                    transform.position = Vector3.MoveTowards(transform.position, mag.Center, mag.PullSpeed * Time.deltaTime);
-                }
+                transform.position = Vector3.MoveTowards(
+                    transform.position,
+                    centerOnPlane,
+                    mag.PullSpeed * Time.deltaTime
+                );
             }
         }
     }
@@ -48,24 +55,28 @@ public class Collectable : MonoBehaviour
         switch (type)
         {
             case CollectableType.Health:
-                GameRefs.PlayerHealth?.Heal(value);
+                if (GameRefs.PlayerHealth != null) GameRefs.PlayerHealth.Heal(value);
                 break;
+
             case CollectableType.Score:
-                GameRefs.Score?.Add(value);
+                if (GameRefs.Score != null) GameRefs.Score.Add(value);
                 break;
+
             case CollectableType.Letter:
-                MailManager.Instance?.Add(value);
+                if (MailManager.Instance != null) MailManager.Instance.Add(value);
                 break;
+
             case CollectableType.Shield:
-                GameRefs.PlayerShield?.Enable(effectSeconds);
+                if (GameRefs.PlayerShield != null) GameRefs.PlayerShield.Enable(effectSeconds);
                 break;
+
             case CollectableType.Magnet:
-                GameRefs.PlayerMagnet?.Enable(effectSeconds);
+                if (GameRefs.PlayerMagnet != null) GameRefs.PlayerMagnet.Enable(effectSeconds);
                 break;
         }
 
-        if (pickupVfx) Instantiate(pickupVfx, transform.position, Quaternion.identity);
-        if (pickupSfx) AudioSource.PlayClipAtPoint(pickupSfx, transform.position);
+        if (pickupVfx != null) Instantiate(pickupVfx, transform.position, Quaternion.identity);
+        if (pickupSfx != null) AudioSource.PlayClipAtPoint(pickupSfx, transform.position);
 
         if (destroyDelay <= 0f) Destroy(gameObject);
         else StartCoroutine(DestroyAfterDelay());

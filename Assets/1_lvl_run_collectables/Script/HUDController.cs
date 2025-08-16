@@ -40,7 +40,7 @@ public class HUDController : MonoBehaviour
     [SerializeField] private float labelHoldSeconds = 3f;
     [SerializeField] private float labelFadeOutDuration = 1f; 
 
-    private const int HpMin = 1;
+    private const int HpMin = 0;
     private const int HpMax = 20;
 
     private Action<int, int> _healthChangedHandler;
@@ -88,7 +88,7 @@ public class HUDController : MonoBehaviour
         int clamped = Mathf.Clamp(current, HpMin, HpMax);
         if (hpSlider != null) hpSlider.value = clamped;
         UpdateHpText(clamped);
-        if (!_gameOverStarted && current < HpMin) StartCoroutine(GameOverSequence());
+        if (!_gameOverStarted && current <= HpMin) StartCoroutine(GameOverSequence());
     }
 
     private void UpdateHpText(int current)
