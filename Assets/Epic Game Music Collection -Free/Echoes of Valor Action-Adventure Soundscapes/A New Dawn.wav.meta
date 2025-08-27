@@ -1,0 +1,30 @@
+fileFormatVersion: 2
+guid: 86da7a961fda0f74fa393129ae1d4e2a
+AudioImporter:
+  externalObjects: {}
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 1
+    sampleRateSetting: 0
+    sampleRateOverride: 44100
+    compressionFormat: 0
+    quality: 1
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  preloadAudioData: 1
+  loadInBackground: 0
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 299437
+  packageName: Epic Game Music Collection -Free
+  packageVersion: 1.0
+  assetPath: Assets/Epic Game Music Collection -Free/Echoes of Valor Action-Adventure
+    Soundscapes/A New Dawn.wav
+  uploadId: 756456

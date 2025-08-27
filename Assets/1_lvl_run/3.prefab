@@ -2619,11 +2619,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
+  targetTag: Player
   animator: {fileID: 0}
   triggerName: Hit
   legacyAnimation: {fileID: 8693871516054737769}
   legacyClipName: 
   vfx: {fileID: 0}
   sfx: {fileID: 0}
+  hitJsamSound: 6
+  playJsam3DFromThis: 1
+  playJsamSound: 1
   disableAfterHit: 1
   removeDelay: 1.2
+  collidersToDisable: []

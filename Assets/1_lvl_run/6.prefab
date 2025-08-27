@@ -3368,14 +3368,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
+  targetTag: Player
   animator: {fileID: 0}
   triggerName: Hit
   legacyAnimation: {fileID: 258467320947601067}
   legacyClipName: 
   vfx: {fileID: 0}
   sfx: {fileID: 0}
+  hitJsamSound: 8
+  playJsam3DFromThis: 1
+  playJsamSound: 1
   disableAfterHit: 1
   removeDelay: 1.2
+  collidersToDisable: []
 --- !u!4 &258467320954858315 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 58219e8eced12ce4c9723796d507d515,
@@ -3513,14 +3518,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
+  targetTag: Player
   animator: {fileID: 0}
   triggerName: Hit
   legacyAnimation: {fileID: 4741518480658790548}
   legacyClipName: 
   vfx: {fileID: 0}
   sfx: {fileID: 0}
+  hitJsamSound: 6
+  playJsam3DFromThis: 1
+  playJsamSound: 1
   disableAfterHit: 1
   removeDelay: 1.2
+  collidersToDisable: []
 --- !u!111 &4741518480658790548 stripped
 Animation:
   m_CorrespondingSourceObject: {fileID: 11100000, guid: 3bbb4725b7e107143a0d7eeaa52be855,

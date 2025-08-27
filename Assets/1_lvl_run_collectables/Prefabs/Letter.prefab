@@ -107,7 +107,7 @@ MonoBehaviour:
   effectSeconds: 5
   rotateSpeed: 90
   pickupVfx: {fileID: 0}
-  pickupSfx: {fileID: 0}
+  pickupSfx: {fileID: 8300000, guid: 7cc057bed53baf34799f52aab3c84800, type: 3}
   destroyDelay: 0
 --- !u!54 &5389250498131007276
 Rigidbody:

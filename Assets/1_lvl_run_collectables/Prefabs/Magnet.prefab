@@ -153,4 +153,5 @@ MonoBehaviour:
   rotateSpeed: 90
   pickupVfx: {fileID: 0}
   pickupSfx: {fileID: 0}
+  pickupVolume: 1
   destroyDelay: 0
