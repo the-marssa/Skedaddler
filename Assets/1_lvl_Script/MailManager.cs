@@ -22,7 +22,10 @@ public class MailManager : MonoBehaviour
 
     public void Add(int amount)
     {
-        Letters += Mathf.Max(0, amount);
+        int add = Mathf.Max(0, amount);
+        Letters += add;
         Changed?.Invoke(Letters);
+        if (add > 0 && StatsManager.Instance != null)
+            StatsManager.Instance.AddLetters(add);
     }
 }

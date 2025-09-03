@@ -11,5 +11,6 @@
         Jump_sfx
     }
     public enum Run_audiolibraryMusic {
-        Play_sfx
+        Play_sfx,
+        Menu_sfx
     }

@@ -29,6 +29,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a2a78e6457ddde9468063ce3d86c0059, type: 2}
   Music:
   - {fileID: 11400000, guid: 6ed51e31f5855ba4ca06e7efce4f979b, type: 2}
+  - {fileID: 11400000, guid: 02b656d6242c6404a90f171a28e5d214, type: 2}
   useCustomNames: 0
   generatedName: Run_audiolibrary
   musicEnum: 
@@ -57,4 +58,5 @@ MonoBehaviour:
   - name: 
     files:
     - {fileID: 11400000, guid: 6ed51e31f5855ba4ca06e7efce4f979b, type: 2}
+    - {fileID: 11400000, guid: 02b656d6242c6404a90f171a28e5d214, type: 2}
     foldout: 1

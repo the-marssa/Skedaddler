@@ -29,7 +29,6 @@ public class Collectable : MonoBehaviour
 
         if (_collected) return;
 
-
         var mag = GameRefs.PlayerMagnet;
         if (mag != null && mag.IsActive)
         {
@@ -56,24 +55,39 @@ public class Collectable : MonoBehaviour
         switch (type)
         {
             case CollectableType.Health:
-                if (GameRefs.PlayerHealth != null) GameRefs.PlayerHealth.Heal(value);
-                break;
+                {
+                    if (GameRefs.PlayerHealth != null && GameRefs.PlayerHealth.Heal(value))
+                    {
+                        if (StatsManager.Instance != null) StatsManager.Instance.AddHeartPickup(1);
+                    }
+                    break;
+                }
 
             case CollectableType.Score:
-                if (GameRefs.Score != null) GameRefs.Score.Add(value);
-                break;
+                {
+                    if (GameRefs.Score != null) GameRefs.Score.Add(value);                
+                    if (StatsManager.Instance != null) StatsManager.Instance.AddStars(value); 
+                    break;
+                }
 
             case CollectableType.Letter:
-                if (MailManager.Instance != null) MailManager.Instance.Add(value);
-                break;
+                {
+                    if (MailManager.Instance != null) MailManager.Instance.Add(value);      
+                    if (StatsManager.Instance != null) StatsManager.Instance.AddLetters(value);
+                    break;
+                }
 
             case CollectableType.Shield:
-                if (GameRefs.PlayerShield != null) GameRefs.PlayerShield.Enable(effectSeconds);
-                break;
+                {
+                    if (GameRefs.PlayerShield != null) GameRefs.PlayerShield.Enable(effectSeconds);
+                    break;
+                }
 
             case CollectableType.Magnet:
-                if (GameRefs.PlayerMagnet != null) GameRefs.PlayerMagnet.Enable(effectSeconds);
-                break;
+                {
+                    if (GameRefs.PlayerMagnet != null) GameRefs.PlayerMagnet.Enable(effectSeconds);
+                    break;
+                }
         }
 
         if (pickupVfx != null) Instantiate(pickupVfx, transform.position, Quaternion.identity);
