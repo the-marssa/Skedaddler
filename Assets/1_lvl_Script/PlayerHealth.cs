@@ -1,6 +1,8 @@
 using UnityEngine;
 using System;
 using JSAM;
+using MoreMountains.Feedbacks;     
+using Lofelt.NiceVibrations; 
 
 [DisallowMultipleComponent]
 public class PlayerHealth : MonoBehaviour
@@ -17,6 +19,9 @@ public class PlayerHealth : MonoBehaviour
     public event Action Died;
 
     private float lastHit = -999f;
+
+    [Header("FEEL")]
+    [SerializeField] private MMF_Player hitFx;
 
     private void Awake()
     {
@@ -38,9 +43,16 @@ public class PlayerHealth : MonoBehaviour
         lastHit = Time.time;
         Current = Mathf.Max(0, Current - amount);
 
-       
+        
         AudioManager.PlaySound(Run_audiolibrarySounds.Hit_sfx);
 
+        
+        hitFx?.PlayFeedbacks();
+
+        
+        HapticPatterns.PlayPreset(HapticPatterns.PresetType.MediumImpact);
+
+       
         Changed?.Invoke(Current, Max);
 
         if (Current == 0)
@@ -76,10 +88,11 @@ public class PlayerHealth : MonoBehaviour
     {
         if (Current == 0) return;
         Current = 0;
-        Changed?.Invoke(Current, Max); 
-        Died?.Invoke();                
+        Changed?.Invoke(Current, Max);
+        Died?.Invoke();
         Changed?.Invoke(Current, Max);
     }
+
 #if UNITY_EDITOR
     private void OnValidate()
     {

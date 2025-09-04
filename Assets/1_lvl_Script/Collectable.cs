@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Lofelt.NiceVibrations; 
 
 public enum CollectableType { Score, Health, Letter, Shield, Magnet }
 
@@ -59,21 +60,23 @@ public class Collectable : MonoBehaviour
                     if (GameRefs.PlayerHealth != null && GameRefs.PlayerHealth.Heal(value))
                     {
                         if (StatsManager.Instance != null) StatsManager.Instance.AddHeartPickup(1);
+                        HapticPatterns.PlayPreset(HapticPatterns.PresetType.MediumImpact);
                     }
                     break;
                 }
 
             case CollectableType.Score:
                 {
-                    if (GameRefs.Score != null) GameRefs.Score.Add(value);                
-                    if (StatsManager.Instance != null) StatsManager.Instance.AddStars(value); 
+                    if (GameRefs.Score != null) GameRefs.Score.Add(value);
+                    if (StatsManager.Instance != null) StatsManager.Instance.AddStars(value);
                     break;
                 }
 
             case CollectableType.Letter:
                 {
-                    if (MailManager.Instance != null) MailManager.Instance.Add(value);      
+                    if (MailManager.Instance != null) MailManager.Instance.Add(value);
                     if (StatsManager.Instance != null) StatsManager.Instance.AddLetters(value);
+                    HapticPatterns.PlayPreset(HapticPatterns.PresetType.MediumImpact);
                     break;
                 }
 

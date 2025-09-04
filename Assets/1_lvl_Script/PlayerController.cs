@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using JSAM;
+using MoreMountains.Feedbacks;
 
 [RequireComponent(typeof(Runner))]
 public class PlayerController : MonoBehaviour
@@ -29,6 +30,10 @@ public class PlayerController : MonoBehaviour
     [Header("Hit / Pause forward")]
     [SerializeField] private float _hitLockTime = 1.2f;
     [SerializeField] private Runner _forwardDriver;
+
+    [Header("FEEL")]
+    [SerializeField] private MMF_Player jumpStartFx; 
+    [SerializeField] private MMF_Player jumpLandFx; 
 
     private RunController _inputController;
     private float _targetX;
@@ -91,6 +96,9 @@ public class PlayerController : MonoBehaviour
 
     private void OnJumpPerformed(InputAction.CallbackContext ctx)
     {
+       
+        jumpStartFx?.PlayFeedbacks();
+
         if (_anim != null) _anim.SetTrigger(_jumpTrigger);
 
         if (!_isJumping)
@@ -111,6 +119,7 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
         _verticalOffset = 0f;
+        jumpLandFx?.PlayFeedbacks();
         _isJumping = false;
     }
 
