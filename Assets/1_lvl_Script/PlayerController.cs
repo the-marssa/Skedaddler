@@ -167,4 +167,12 @@ public class PlayerController : MonoBehaviour
     }
 
     public void ResetOffset() { _targetX = 0f; }
+    public void ApplyConfig(float lateralSpeed, float xSmoothTime, float inputDeadZone, float jumpHeight)
+    {
+        _lateralSpeed = lateralSpeed;
+        _xSmoothTime = xSmoothTime;
+        _inputDeadZone = inputDeadZone;
+        _jumpHeight = jumpHeight;
+    }
+
 }

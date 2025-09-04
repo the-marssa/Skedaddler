@@ -3,7 +3,6 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class HeartCollectible : MonoBehaviour
 {
-    [SerializeField] private int amount = 1;
     [SerializeField] private string targetTag = "Player";
     [SerializeField] private bool consumeEvenIfNoHeal = false;
 
@@ -15,11 +14,18 @@ public class HeartCollectible : MonoBehaviour
         if (!other.CompareTag(targetTag)) return;
 
         var hp = GameRefs.PlayerHealth;
+        var heart = ConfigProvider.I?.GetCollectible(GameConfig.CollectibleKind.Heart);
+        int amount = (heart != null) ? heart.healAmount : 1;
 
         bool healed = (hp != null) && hp.Heal(amount);
         if (healed || consumeEvenIfNoHeal)
         {
-            if (healed && StatsManager.Instance != null) StatsManager.Instance.AddHeartPickup(amount);
+            if (heart != null)
+            {
+                if (heart.sfx) AudioSource.PlayClipAtPoint(heart.sfx, transform.position);
+                if (heart.vfxPrefab) Instantiate(heart.vfxPrefab, transform.position, Quaternion.identity);
+            }
+
             consumed = true;
             Destroy(gameObject);
         }
