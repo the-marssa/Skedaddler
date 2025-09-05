@@ -1,0 +1,29 @@
+---
+title: Register Callbacks
+---
+
+## Container Build Callbacks
+
+You can register any arbitrary action to happen at container build time by registering a build callback.
+
+```cs
+builder.RegisterBuildCallback(container =>
+{
+    var serviceA = container.Resolve<ServiceA>();
+    var serviceB = container.Resolve<ServiceB>();
+    // ...
+});
+```
+
+- We can use `IObjectResolver` as a callback argument.
+- For more information about `IObjectResolver`, see [Container API](../resolving/container-api)
+
+## Container Dispose Callback
+
+```cs
+builder.RegisterDisposeCallback(container =>
+{
+    // Processes you want to perform in which the container is disposed.
+});
+```
+

@@ -34,12 +34,17 @@ ModelImporter:
   - first:
       111: 11100000
     second: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: VCOL
+    second: {fileID: 2100000, guid: 9599d0bd4f471d643a454941ba19309b, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0

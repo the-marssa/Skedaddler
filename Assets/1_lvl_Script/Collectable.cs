@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
-using Lofelt.NiceVibrations; 
+using Lofelt.NiceVibrations;
+using VContainer.Unity;
 
 public enum CollectableType { Score, Health, Letter, Shield, Magnet }
 
@@ -23,7 +24,26 @@ public class Collectable : MonoBehaviour
 
     private bool _collected;
 
-    private void Update()
+    private IRunSession _run;
+    private IPlayerHealth _hp;
+
+    void Awake()
+    {
+        TryResolveOnce();
+    }
+
+    void Start()
+    {
+        if (_run == null || _hp == null) StartCoroutine(ResolveWhenReady());
+    }
+
+    void Reset()
+    {
+        var col = GetComponent<Collider>();
+        if (col) col.isTrigger = true;
+    }
+
+    void Update()
     {
         if (!_collected && rotateSpeed != 0f)
             transform.Rotate(0f, rotateSpeed * Time.deltaTime, 0f);
@@ -48,49 +68,42 @@ public class Collectable : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (_collected || !other.CompareTag(PlayerTag)) return;
+
+        if (_run == null || _hp == null) TryResolveOnce();
+
         _collected = true;
 
         switch (type)
         {
             case CollectableType.Health:
+                if (_hp != null && _hp.Heal(value))
                 {
-                    if (GameRefs.PlayerHealth != null && GameRefs.PlayerHealth.Heal(value))
-                    {
-                        if (StatsManager.Instance != null) StatsManager.Instance.AddHeartPickup(1);
-                        HapticPatterns.PlayPreset(HapticPatterns.PresetType.MediumImpact);
-                    }
-                    break;
+                    if (StatsManager.Instance != null) StatsManager.Instance.AddHeartPickup(1);
+                    HapticPatterns.PlayPreset(HapticPatterns.PresetType.MediumImpact);
                 }
+                break;
 
             case CollectableType.Score:
-                {
-                    if (GameRefs.Score != null) GameRefs.Score.Add(value);
-                    if (StatsManager.Instance != null) StatsManager.Instance.AddStars(value);
-                    break;
-                }
+                _run?.AddStars(value);
+                if (StatsManager.Instance != null) StatsManager.Instance.AddStars(value);
+                break;
 
             case CollectableType.Letter:
-                {
-                    if (MailManager.Instance != null) MailManager.Instance.Add(value);
-                    if (StatsManager.Instance != null) StatsManager.Instance.AddLetters(value);
-                    HapticPatterns.PlayPreset(HapticPatterns.PresetType.MediumImpact);
-                    break;
-                }
+                _run?.AddLetters(value);
+                if (StatsManager.Instance != null) StatsManager.Instance.AddLetters(value);
+                HapticPatterns.PlayPreset(HapticPatterns.PresetType.MediumImpact);
+                break;
 
             case CollectableType.Shield:
-                {
-                    if (GameRefs.PlayerShield != null) GameRefs.PlayerShield.Enable(effectSeconds);
-                    break;
-                }
+                if (GameRefs.PlayerShield != null) GameRefs.PlayerShield.Enable(effectSeconds);
+                break;
 
             case CollectableType.Magnet:
-                {
-                    if (GameRefs.PlayerMagnet != null) GameRefs.PlayerMagnet.Enable(effectSeconds);
-                    break;
-                }
+                if (GameRefs.PlayerMagnet != null) GameRefs.PlayerMagnet.Enable(effectSeconds);
+                break;
         }
 
         if (pickupVfx != null) Instantiate(pickupVfx, transform.position, Quaternion.identity);
@@ -98,6 +111,27 @@ public class Collectable : MonoBehaviour
 
         if (destroyDelay <= 0f) Destroy(gameObject);
         else StartCoroutine(DestroyAfterDelay());
+    }
+
+    private void TryResolveOnce()
+    {
+        var scope = LifetimeScope.Find<LifetimeScope>();
+        if (scope == null) return;
+        var r = scope.Container;
+        if (r == null) return;
+
+        try { if (_run == null) _run = (IRunSession)r.Resolve(typeof(IRunSession), null); } catch { }
+        try { if (_hp == null) _hp = (IPlayerHealth)r.Resolve(typeof(IPlayerHealth), null); } catch { }
+    }
+
+    private IEnumerator ResolveWhenReady()
+    {
+        for (int i = 0; i < 60 && (_run == null || _hp == null); i++)
+        {
+            TryResolveOnce();
+            if (_run != null && _hp != null) yield break;
+            yield return null;
+        }
     }
 
     private IEnumerator DestroyAfterDelay()

@@ -1,0 +1,114 @@
+---
+id: constructor-injection
+title: Constructor Injection
+---
+
+In general, dependencies are constructed and injected when they're resolved for the first time (with [some](../registering/register-factory) [exceptions](../registering/register-type#register-instance)).
+
+When registering a class that needs dependencies, provide a constructor that takes them as arguments. VContainer will take care of the rest.
+
+:::note
+At this time, optional dependencies are **not** supported in constructors. If a constructor dependency is missing, VContainer will throw an exception when building or validating a container.
+:::
+
+Here's a basic example.
+
+```csharp
+class ClassA
+{
+    readonly IServiceA serviceA;
+    readonly IServiceB serviceB;
+    readonly SomeUnityComponent component;
+
+    public ClassA(
+        IServiceA serviceA,
+        IServiceB serviceB,
+        SomeUnityComponent component)
+    {
+        this.serviceA = serviceA;
+        this.serviceB = serviceB;
+        this.component = component;
+    }
+}
+```
+
+The above code sample does not use VContainer APIs, because it doesn't need any. You can still manually create instances of `ClassA` with the same constructor if you'd like.
+
+:::caution
+[Unity strips unused code from builds](https://docs.unity3d.com/Manual/ManagedCodeStripping), but it often makes mistakes when reflection or IL code generation are involved (as is the case with VContainer). To ensure your constructor is not removed, use a [`link.xml`](https://docs.unity3d.com/Manual/ManagedCodeStripping#LinkXML) file or add the `[Inject]` attribute to **one** constructor. This also applies to [methods](./method-injection).
+:::
+
+```csharp
+    [Inject]
+    public ClassA(
+        IServiceA serviceA,
+        IServiceB serviceB,
+        SomeUnityComponent component)
+    {
+        // ...
+    }
+```
+
+:::note
+If a class has more than one constructor, VContainer will throw an exception unless **exactly one** constructor defines `[Inject]`. In such a case, VContainer prioritizes that one constructor when resolving dependencies.
+:::
+
+:::tip Recommendation
+Use constructors and `readonly` fields for injection whenever possible. Here's why:
+
+- It's the simplest injection form to use.
+- If used with VContainer, the class can safely assume that its dependencies have been resolved (or else it wouldn't have been constructed).
+- There's no magic in your class; you can even instantiate it without using VContainer (e.g. for testing).
+- Class dependencies are made obvious. It also becomes easy to tell when a class has too many responsibilities (because its constructor will be too big).
+:::
+
+## Key Attribute {#key-attribute}
+
+When you have multiple implementations of the same interface or type registered with different keys, you can use the `Key` attribute to specify which implementation to inject.
+
+```csharp
+class TestClass
+{
+    private readonly IWeapon _primaryWeapon;
+    private readonly IEnemy _goblin;
+    private readonly ILevel _level1;
+
+    public TestClass(
+        [Key(WeaponType.Primary)] IWeapon primaryWeapon,
+        [Key("goblin")] IEnemy goblin,
+        [Key(1)] ILevel level1)
+    {
+        _primaryWeapon = primaryWeapon;
+        _goblin = goblin;
+        _level1 = level1;
+    }
+}
+```
+
+:::note
+The `Key` attribute must be used with types that have been registered with the corresponding key using the `.Keyed()` method. See the [Register with Keys](../registering/register-with-keys) section for more information.
+:::
+
+## `MonoBehaviour`
+
+[`MonoBehaviour`s](https://docs.unity3d.com/ScriptReference/MonoBehaviour) don't support constructors. Use [method injection](./method-injection) or [property/field injection](./property-field-injection) instead.
+
+## Suppressing Warnings
+
+Unity includes [a set of code analysis attributes](https://www.jetbrains.com/help/rider/Reference__Code_Annotation_Attributes.html) defined by JetBrains that some IDEs (including Rider) use for code analysis. If your IDE marks your injection constructor as unused, apply [`[UsedImplicitly]`](https://www.jetbrains.com/help/rider/Reference__Code_Annotation_Attributes.html#UsedImplicitlyAttribute) (possibly with [`ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature`](https://www.jetbrains.com/help/rider/Reference__Code_Annotation_Attributes.html#InstantiatedNoFixedConstructorSignature)):
+
+```csharp
+public class Dependency
+{
+    [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
+    public Dependency(GameContext game, StatusContext status)
+    {
+        _game = game;
+    }
+}
+// This class and constructor will not be marked as unused, but the status parameter will be.
+```
+
+When constructors or methods are annotated as described, Rider will prevent the constructor (and the class) from being marked as unused. However, unused parameters within that constructor will still be marked as such.
+
+Results may vary for other IDEs.

@@ -1,11 +1,11 @@
 using UnityEngine;
 using System;
 using JSAM;
-using MoreMountains.Feedbacks;     
-using Lofelt.NiceVibrations; 
+using MoreMountains.Feedbacks;
+using Lofelt.NiceVibrations;
 
 [DisallowMultipleComponent]
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour, IPlayerHealth
 {
     private const int ABS_MAX_HP = 20;
 
@@ -43,16 +43,10 @@ public class PlayerHealth : MonoBehaviour
         lastHit = Time.time;
         Current = Mathf.Max(0, Current - amount);
 
-        
         AudioManager.PlaySound(Run_audiolibrarySounds.Hit_sfx);
-
-        
         hitFx?.PlayFeedbacks();
-
-        
         HapticPatterns.PlayPreset(HapticPatterns.PresetType.MediumImpact);
 
-       
         Changed?.Invoke(Current, Max);
 
         if (Current == 0)
@@ -63,6 +57,7 @@ public class PlayerHealth : MonoBehaviour
         return true;
     }
 
+   
     public bool Heal(int amount)
     {
         if (amount <= 0 || Current <= 0) return false;

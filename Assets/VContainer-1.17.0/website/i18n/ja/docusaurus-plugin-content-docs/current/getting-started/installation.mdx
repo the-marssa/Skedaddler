@@ -1,0 +1,27 @@
+---
+title: インストール
+---
+
+*Unity 2018.4+* 以上のバージョンが必要です。
+
+### UPM (と Git URL) を使うやりかた
+
+1. プロジェクトの `Packages/manifest.json` ファイルを開く。
+2. `"dependencies": {` 行の下に以下を追記。
+    - ```json title="Packages/manifest.json"
+      "jp.hadashikick.vcontainer": "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.17.0",
+      ```
+3. Unityでプロジェクトをリフレッシュすると、UPMがパッケージをインストールしてくれます。
+
+### OpenUPM を使うやりかた
+
+1. VContainerのパッケージは [openupm registry](https://openupm.com) でも提供されています。 OpenUPMを使うには [openupm-cli](https://github.com/openupm/openupm-cli) コマンドラインツールを使用するのがおすすめです。
+2. プロジェクトのディレクトリで以下のコマンドを実行すると、VContainerのパッケージを追加することができます。
+    - ```
+      openupm add jp.hadashikick.vcontainer
+      ```
+
+### .unitypackage を利用する方法
+
+[Releases](https://github.com/hadashiA/VContainer/releases) ページから .unitypackage をダウンロードして開きます。
+

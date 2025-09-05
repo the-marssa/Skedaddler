@@ -3124,6 +3124,7 @@ GameObject:
   - component: {fileID: 378044204}
   - component: {fileID: 378044203}
   - component: {fileID: 378044202}
+  - component: {fileID: 378044205}
   m_Layer: 5
   m_Name: TryAgainButton
   m_TagString: Untagged
@@ -3195,9 +3196,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1827179535}
-        m_TargetAssemblyTypeName: GameOverController, Assembly-CSharp
-        m_MethodName: TryAgain
+      - m_Target: {fileID: 378044205}
+        m_TargetAssemblyTypeName: ForeverRestart, Assembly-CSharp
+        m_MethodName: OnTryAgain
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3245,6 +3246,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 378044200}
   m_CullTransparentMesh: 0
+--- !u!114 &378044205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 378044200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99d3dbe20f22900448d7c50e8afc7fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runner: {fileID: 869045002}
 --- !u!1 &384990672
 GameObject:
   m_ObjectHideFlags: 0
@@ -9943,6 +9957,7 @@ GameObject:
   - component: {fileID: 1027937316}
   - component: {fileID: 1027937317}
   - component: {fileID: 1027937318}
+  - component: {fileID: 1027937319}
   m_Layer: 5
   m_Name: HUD
   m_TagString: Untagged
@@ -10019,6 +10034,20 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1027937319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1027937315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58e5c92d2176e84449d257e9712fc7ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  starsText: {fileID: 1431678367}
+  lettersText: {fileID: 2096501428}
 --- !u!1 &1027986556
 GameObject:
   m_ObjectHideFlags: 0
@@ -12724,6 +12753,71 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 825742207}
   m_SourcePrefab: {fileID: 100100000, guid: ef20b16bfaee98047bf78cc3585cb1d7, type: 3}
+--- !u!1 &1508095608
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1508095611}
+  - component: {fileID: 1508095610}
+  - component: {fileID: 1508095609}
+  m_Layer: 0
+  m_Name: GameLifetimeScope
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1508095609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508095608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92d73bfc26772314986c9a2de0fec69a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentReference:
+    TypeName: 
+  autoRun: 1
+  autoInjectGameObjects: []
+--- !u!114 &1508095610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508095608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b2c62ac3bcd44fb9e09835581422057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentReference:
+    TypeName: 
+  autoRun: 1
+  autoInjectGameObjects: []
+--- !u!4 &1508095611
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508095608}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.0025314689, y: 0.827022, z: -0.0014101267}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1519243385
 GameObject:
   m_ObjectHideFlags: 0
@@ -16173,6 +16267,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1195533344}
   - {fileID: 2032791516}
+  - {fileID: 1508095611}
   - {fileID: 180171427}
   - {fileID: 1157961488}
   - {fileID: 20232710}
