@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using JSAM;
 
 public class GamePause : MonoBehaviour
 {
@@ -13,12 +12,8 @@ public class GamePause : MonoBehaviour
     [SerializeField] private GameObject[] disableObjects;
     [SerializeField] private bool muteAudio = true;
 
-    [Header("Run music")]
-    [SerializeField] private Run_audiolibraryMusic runMusic = Run_audiolibraryMusic.Play_sfx;
-    private bool musicWasPlaying;
-
-    [Header("Int")]
-    [SerializeField] private GameResetter resetter;
+    [Header("Optional")]
+    [SerializeField] private GameResetter resetter; 
 
     private bool paused;
 
@@ -32,8 +27,6 @@ public class GamePause : MonoBehaviour
     {
         if (paused) return;
         paused = true;
-
-        musicWasPlaying = AudioManager.IsMusicPlaying(runMusic);
 
         Time.timeScale = 0f;
         if (muteAudio) AudioListener.pause = true;
@@ -58,85 +51,24 @@ public class GamePause : MonoBehaviour
 
         if (pausePanel) pausePanel.SetActive(false);
         SetHudVisible(true);
-
-        if (musicWasPlaying && !AudioManager.IsMusicPlaying(runMusic))
-            AudioManager.PlayMusic(runMusic, isMainMusic: true);
     }
 
     public void Restart()
     {
-        UnpauseCleanup();
-
-        if (resetter) resetter.RestartFromBeginning();
-        else
-        {
-            var scene = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(scene.buildIndex);
-        }
-    }
-
-    public void GoToMenu()
-    {
-        ExitWithoutSaving();
-    }
-
-    public void ExitWithoutSaving()
-    {
         
-        if (StatsManager.Instance != null) StatsManager.Instance.CacheLastRunForMenu();
-
-        UnpauseCleanup();
-
         if (resetter)
         {
-            AppFlow.SkipNextIntro = true;
-            resetter.ReturnToMenu();
+            Resume();               
+            resetter.RestartFromBeginning();
             return;
         }
 
-        AppFlow.SkipNextIntro = true;
-        SceneManager.LoadScene("MainMenu");
-    }
-
-    
-    public void SaveAndExit()
-    {
-        if (StatsManager.Instance != null && StatsManager.Instance.CurrentRun != null)
-        {
-            StatsManager.Instance.EndRun(false); 
-        }
-
-       
-        if (StatsManager.Instance != null) StatsManager.Instance.CacheLastRunForMenu();
-
-        UnpauseCleanup();
-
-        if (resetter)
-        {
-            AppFlow.SkipNextIntro = true;
-            resetter.ReturnToMenu();
-            return;
-        }
-
-        AppFlow.SkipNextIntro = true;
-        SceneManager.LoadScene("MainMenu");
-    }
-
-    private void UnpauseCleanup()
-    {
-        paused = false;
-
+        
         Time.timeScale = 1f;
         if (muteAudio) AudioListener.pause = false;
 
-        if (disableComponents != null) foreach (var c in disableComponents) if (c) c.enabled = true;
-        if (disableObjects != null) foreach (var go in disableObjects) if (go) go.SetActive(true);
-
-        if (pausePanel) pausePanel.SetActive(false);
-        SetHudVisible(true);
-
-        if (musicWasPlaying && !AudioManager.IsMusicPlaying(runMusic))
-            AudioManager.PlayMusic(runMusic, isMainMusic: true);
+        var scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(scene.buildIndex);
     }
 
     private void SetHudVisible(bool v)

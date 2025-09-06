@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 5642770896713446846}
   - component: {fileID: 3701346413369129123}
   - component: {fileID: 2862624821852077230}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shield
-  m_TagString: Untagged
+  m_TagString: Collectibles
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -72,12 +72,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 3
-  value: 1
-  effectSeconds: 5
-  rotateSpeed: 90
-  pickupVfx: {fileID: 0}
-  pickupSfx: {fileID: 0}
-  destroyDelay: 0
+  targetTag: Player
+  amountOverride: -1
+  durationOverride: -1
 --- !u!212 &2862624821852077230
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -1,142 +1,71 @@
-using System.Collections;
 using UnityEngine;
-using Lofelt.NiceVibrations;
-using VContainer.Unity;
-
-public enum CollectableType { Score, Health, Letter, Shield, Magnet }
 
 [RequireComponent(typeof(Collider))]
+[DisallowMultipleComponent]
 public class Collectable : MonoBehaviour
 {
-    private const string PlayerTag = "Player";
+    public enum Type { Heart, Star, Letter, Magnet, Shield }
+    [SerializeField] private Type type = Type.Star;
+    [SerializeField] private string targetTag = "Player";
+    [SerializeField] private int amountOverride = -1;     
+    [SerializeField] private float durationOverride = -1; 
 
-    [Header("Setup")]
-    [SerializeField] private CollectableType type = CollectableType.Score;
-    [SerializeField, Min(0)] private int value = 1;
-    [SerializeField, Min(0f)] private float effectSeconds = 5f;
-
-    [Header("Feedback")]
-    [SerializeField] private float rotateSpeed = 90f;
-    [SerializeField] private GameObject pickupVfx;
-    [SerializeField] private AudioClip pickupSfx;
-    [SerializeField, Range(0f, 1f)] private float pickupVolume = 1f;
-    [SerializeField, Min(0f)] private float destroyDelay = 0f;
-
-    private bool _collected;
-
-    private IRunSession _run;
+    private IRunSessionProvider _provider;
+    private RunRewardsConfig _rewards;
     private IPlayerHealth _hp;
+    private IPlayerPowerups _powerups;
 
-    void Awake()
+    [VContainer.Inject]
+    public void Construct(IRunSessionProvider provider, RunRewardsConfig rewards,
+                          IPlayerHealth hp, IPlayerPowerups powerups)
+    { _provider = provider; _rewards = rewards; _hp = hp; _powerups = powerups; }
+
+    private void Reset()
     {
-        TryResolveOnce();
+        var col = GetComponent<Collider>(); col.isTrigger = true;
+        if (!TryGetComponent<Rigidbody>(out var rb)) rb = gameObject.AddComponent<Rigidbody>();
+        rb.isKinematic = true; rb.useGravity = false;
     }
 
-    void Start()
+    private bool _consumed;
+    private void OnTriggerEnter(Collider other)
     {
-        if (_run == null || _hp == null) StartCoroutine(ResolveWhenReady());
-    }
-
-    void Reset()
-    {
-        var col = GetComponent<Collider>();
-        if (col) col.isTrigger = true;
-    }
-
-    void Update()
-    {
-        if (!_collected && rotateSpeed != 0f)
-            transform.Rotate(0f, rotateSpeed * Time.deltaTime, 0f);
-
-        if (_collected) return;
-
-        var mag = GameRefs.PlayerMagnet;
-        if (mag != null && mag.IsActive)
-        {
-            Vector3 centerOnPlane = new Vector3(mag.Center.x, transform.position.y, mag.Center.z);
-            Vector3 toCenter = centerOnPlane - transform.position;
-
-            float r = mag.Radius;
-            if (toCenter.sqrMagnitude <= r * r)
-            {
-                transform.position = Vector3.MoveTowards(
-                    transform.position,
-                    centerOnPlane,
-                    mag.PullSpeed * Time.deltaTime
-                );
-            }
-        }
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (_collected || !other.CompareTag(PlayerTag)) return;
-
-        if (_run == null || _hp == null) TryResolveOnce();
-
-        _collected = true;
+        if (_consumed || !other.CompareTag(targetTag)) return;
 
         switch (type)
         {
-            case CollectableType.Health:
-                if (_hp != null && _hp.Heal(value))
-                {
-                    if (StatsManager.Instance != null) StatsManager.Instance.AddHeartPickup(1);
-                    HapticPatterns.PlayPreset(HapticPatterns.PresetType.MediumImpact);
-                }
+            case Type.Heart:
+                int heal = amountOverride > 0 ? amountOverride :
+                           (_rewards ? _rewards.heartHeal : 1);
+                if (!(_hp != null && _hp.Heal(heal))) return;
                 break;
 
-            case CollectableType.Score:
-                _run?.AddStars(value);
-                if (StatsManager.Instance != null) StatsManager.Instance.AddStars(value);
+            case Type.Star:
+                int s = amountOverride > 0 ? amountOverride :
+                        (_rewards ? _rewards.starScore : 1);
+                _provider?.Current?.AddStars(s);
                 break;
 
-            case CollectableType.Letter:
-                _run?.AddLetters(value);
-                if (StatsManager.Instance != null) StatsManager.Instance.AddLetters(value);
-                HapticPatterns.PlayPreset(HapticPatterns.PresetType.MediumImpact);
+            case Type.Letter:
+                int l = amountOverride > 0 ? amountOverride :
+                        (_rewards ? _rewards.letterValue : 1);
+                _provider?.Current?.AddLetters(l);
                 break;
 
-            case CollectableType.Shield:
-                if (GameRefs.PlayerShield != null) GameRefs.PlayerShield.Enable(effectSeconds);
+            case Type.Magnet:
+                float m = durationOverride > 0 ? durationOverride :
+                          (_rewards ? _rewards.magnetDuration : 5f);
+                _powerups?.ActivateMagnet(m);
                 break;
 
-            case CollectableType.Magnet:
-                if (GameRefs.PlayerMagnet != null) GameRefs.PlayerMagnet.Enable(effectSeconds);
+            case Type.Shield:
+                float sh = durationOverride > 0 ? durationOverride :
+                           (_rewards ? _rewards.shieldDuration : 5f);
+                _powerups?.ActivateShield(sh);
                 break;
         }
 
-        if (pickupVfx != null) Instantiate(pickupVfx, transform.position, Quaternion.identity);
-        if (pickupSfx != null) AudioSource.PlayClipAtPoint(pickupSfx, transform.position, pickupVolume);
-
-        if (destroyDelay <= 0f) Destroy(gameObject);
-        else StartCoroutine(DestroyAfterDelay());
-    }
-
-    private void TryResolveOnce()
-    {
-        var scope = LifetimeScope.Find<LifetimeScope>();
-        if (scope == null) return;
-        var r = scope.Container;
-        if (r == null) return;
-
-        try { if (_run == null) _run = (IRunSession)r.Resolve(typeof(IRunSession), null); } catch { }
-        try { if (_hp == null) _hp = (IPlayerHealth)r.Resolve(typeof(IPlayerHealth), null); } catch { }
-    }
-
-    private IEnumerator ResolveWhenReady()
-    {
-        for (int i = 0; i < 60 && (_run == null || _hp == null); i++)
-        {
-            TryResolveOnce();
-            if (_run != null && _hp != null) yield break;
-            yield return null;
-        }
-    }
-
-    private IEnumerator DestroyAfterDelay()
-    {
-        yield return new WaitForSeconds(destroyDelay);
+        _consumed = true;
         Destroy(gameObject);
     }
 }

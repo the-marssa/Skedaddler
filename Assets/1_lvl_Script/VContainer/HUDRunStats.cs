@@ -1,28 +1,34 @@
-using TMPro;
 using UnityEngine;
+using TMPro;
 using VContainer;
 
 public class HUDRunStats : MonoBehaviour
 {
-    [SerializeField] TMP_Text starsText;
-    [SerializeField] TMP_Text lettersText;
+    [SerializeField] private TMP_Text starsText;
+    [SerializeField] private TMP_Text lettersText;
 
-    [Inject] IRunSession run;
+    private IRunSessionProvider _provider;
 
-    void OnEnable()
+    [Inject] public void Construct(IRunSessionProvider provider) => _provider = provider;
+
+    private int _lastStars = int.MinValue;
+    private int _lastLetters = int.MinValue;
+
+    private void Update()
     {
-        run.StarsChanged += OnStars;
-        run.LettersChanged += OnLetters;
-        OnStars(run.Stars);
-        OnLetters(run.Letters);
-    }
+        var s = _provider?.Current;
+        if (s == null) return;
 
-    void OnDisable()
-    {
-        run.StarsChanged -= OnStars;
-        run.LettersChanged -= OnLetters;
-    }
+        if (s.Stars != _lastStars)
+        {
+            _lastStars = s.Stars;
+            if (starsText) starsText.text = _lastStars.ToString();
+        }
 
-    void OnStars(int v) => starsText.text = v.ToString();
-    void OnLetters(int v) => lettersText.text = v.ToString();
+        if (s.Letters != _lastLetters)
+        {
+            _lastLetters = s.Letters;
+            if (lettersText) lettersText.text = _lastLetters.ToString();
+        }
+    }
 }

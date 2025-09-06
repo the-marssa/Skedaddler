@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Magnet
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6c5d5f4ec05e47947b43a75d2aca001d, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6c5d5f4ec05e47947b43a75d2aca001d, type: 3}
+      propertyPath: m_TagString
+      value: Collectibles
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6c5d5f4ec05e47947b43a75d2aca001d, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.7566
@@ -148,10 +156,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 4
-  value: 1
-  effectSeconds: 5
-  rotateSpeed: 90
-  pickupVfx: {fileID: 0}
-  pickupSfx: {fileID: 0}
-  pickupVolume: 1
-  destroyDelay: 0
+  targetTag: Player
+  amountOverride: -1
+  durationOverride: -1

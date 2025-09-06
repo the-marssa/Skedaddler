@@ -5,15 +5,16 @@ TagManager:
   serializedVersion: 3
   tags:
   - Obstacle
+  - Collectibles
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - PauseButton
-  - 
+  - Collectibles
   - Coins
   - Obstacle
   - Powerup

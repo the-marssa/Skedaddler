@@ -1,8 +1,8 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using System;
 using System.Collections;
+using VContainer;
 
 public class HUDController : MonoBehaviour
 {
@@ -17,7 +17,6 @@ public class HUDController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI lettersText;
 
     [Header("References")]
-    [SerializeField] private GameObject player;
     [SerializeField] private PlayerHealth health;
 
     [Header("Game Over UI")]
@@ -33,37 +32,54 @@ public class HUDController : MonoBehaviour
     [SerializeField] private float labelFadeInDuration = 1f;
     [SerializeField] private float labelHoldSeconds = 3f;
     [SerializeField] private float labelFadeOutDuration = 1f;
+    [SerializeField] private float deathFxDuration = 0.8f; 
+
+    [Header("Power-up Timers")]
+    [SerializeField] private TextMeshProUGUI shieldTimerText;
+    [SerializeField] private GameObject shieldTimerGroup;
+    [SerializeField] private TextMeshProUGUI magnetTimerText;
+    [SerializeField] private GameObject magnetTimerGroup;
 
     private const int HpMin = 0;
     private const int HpMax = 20;
 
-    private Action<int, int> _healthChangedHandler;
+    private IRunSessionProvider _provider;
+    private IPlayerPowerups _powerups;
+
+    private int _lastHp = int.MinValue;
+    private int _lastStars = int.MinValue;
+    private int _lastLetters = int.MinValue;
+
     private bool _gameOverStarted;
     private Coroutine _gameOverCR;
+
+    [Inject]
+    public void Construct(IRunSessionProvider provider, IPlayerPowerups powerups)
+    {
+        _provider = provider;
+        _powerups = powerups;
+    }
 
     private void Start()
     {
         if (hpSlider != null) { hpSlider.minValue = HpMin; hpSlider.maxValue = HpMax; }
 
+        
         if (health != null)
         {
-            int startVal = Mathf.Clamp(health.Current, HpMin, HpMax);
-            if (hpSlider != null) hpSlider.value = startVal;
-            UpdateHpText(startVal);
-            _healthChangedHandler = (current, _) => OnHealthChanged(current);
-            health.Changed += _healthChangedHandler;
+            int startHp = Mathf.Clamp(health.Current, HpMin, HpMax);
+            _lastHp = startHp;
+            if (hpSlider != null) hpSlider.value = startHp;
+            if (hpText != null) hpText.text = $"{startHp}/{HpMax}";
         }
 
-        if (MailManager.Instance != null)
+        var s = _provider?.Current;
+        if (s != null)
         {
-            MailManager.Instance.Changed += OnLettersChanged;
-            OnLettersChanged(MailManager.Instance.Letters);
-        }
-
-        if (ScoreManager.Instance != null)
-        {
-            ScoreManager.Instance.Changed += OnScoreChanged;
-            OnScoreChanged(ScoreManager.Instance.Score);
+            _lastStars = s.Stars;
+            _lastLetters = s.Letters;
+            if (scoreText) scoreText.text = $"x {s.Stars}";
+            if (lettersText) lettersText.text = $"x {s.Letters}";
         }
 
         if (gameOverLabel != null) gameOverLabel.gameObject.SetActive(false);
@@ -76,49 +92,65 @@ public class HUDController : MonoBehaviour
         if (_gameOverCR != null) { StopCoroutine(_gameOverCR); _gameOverCR = null; }
     }
 
-    private void OnDestroy()
+    private void Update()
     {
-        if (health != null && _healthChangedHandler != null) health.Changed -= _healthChangedHandler;
-        if (ScoreManager.Instance != null) ScoreManager.Instance.Changed -= OnScoreChanged;
-        if (MailManager.Instance != null) MailManager.Instance.Changed -= OnLettersChanged;
-    }
-
-    private void OnHealthChanged(int current)
-    {
-        int clamped = Mathf.Clamp(current, HpMin, HpMax);
-        if (hpSlider != null) hpSlider.value = clamped;
-        UpdateHpText(clamped);
-
-        if (!_gameOverStarted && current <= HpMin)
+        if (health != null)
         {
-            if (!isActiveAndEnabled) return;
-            if (_gameOverCR == null) _gameOverCR = StartCoroutine(GameOverSequence());
+            int hp = Mathf.Clamp(health.Current, HpMin, HpMax);
+            if (hp != _lastHp)
+            {
+                _lastHp = hp;
+                if (hpSlider) hpSlider.value = hp;
+                if (hpText) hpText.text = $"{hp}/{HpMax}";
+
+                if (!_gameOverStarted && hp <= HpMin)
+                {
+                    if (isActiveAndEnabled && _gameOverCR == null)
+                        _gameOverCR = StartCoroutine(GameOverSequence());
+                }
+            }
         }
-    }
 
-    private void UpdateHpText(int current)
-    {
-        if (hpText != null) hpText.text = $"{current}/{HpMax}";
-    }
+        var s = _provider?.Current;
+        if (s != null)
+        {
+            if (s.Stars != _lastStars)
+            {
+                _lastStars = s.Stars;
+                if (scoreText) scoreText.text = $"x {s.Stars}";
+            }
+            if (s.Letters != _lastLetters)
+            {
+                _lastLetters = s.Letters;
+                if (lettersText) lettersText.text = $"x {s.Letters}";
+            }
+        }
 
-    private void OnScoreChanged(int value)
-    {
-        if (scoreText != null) scoreText.text = $"x {value}";
-    }
+        if (_powerups != null)
+        {
+            
+            if (_powerups.IsShieldActive)
+            {
+                if (shieldTimerGroup) shieldTimerGroup.SetActive(true);
+                if (shieldTimerText) shieldTimerText.text = Mathf.CeilToInt(_powerups.ShieldRemaining).ToString();
+            }
+            else if (shieldTimerGroup) shieldTimerGroup.SetActive(false);
 
-    private void OnLettersChanged(int count)
-    {
-        if (lettersText != null) lettersText.text = $"x {count}";
+           
+            if (_powerups.IsMagnetActive)
+            {
+                if (magnetTimerGroup) magnetTimerGroup.SetActive(true);
+                if (magnetTimerText) magnetTimerText.text = Mathf.CeilToInt(_powerups.MagnetRemaining).ToString();
+            }
+            else if (magnetTimerGroup) magnetTimerGroup.SetActive(false);
+        }
     }
 
     private IEnumerator GameOverSequence()
     {
         _gameOverStarted = true;
 
-        var death = GameRefs.PlayerDeath;
-        if (death != null) death.Play();
-
-        yield return new WaitForSeconds(death != null ? death.Duration : 0.8f);
+        yield return new WaitForSeconds(deathFxDuration);
 
         SetGameplayUIVisible(false);
 
@@ -162,10 +194,7 @@ public class HUDController : MonoBehaviour
             yield return new WaitForSecondsRealtime(0.6f);
         }
 
-        
-
         if (gameOverPanel != null) gameOverPanel.SetActive(true);
-
         _gameOverCR = null;
     }
 
@@ -179,37 +208,6 @@ public class HUDController : MonoBehaviour
             cg.alpha = show ? 1f : 0f;
             cg.interactable = show;
             cg.blocksRaycasts = show;
-        }
-    }
-
-    [Header("Power-up Timers")]
-    [SerializeField] private TextMeshProUGUI shieldTimerText;
-    [SerializeField] private GameObject shieldTimerGroup;
-    [SerializeField] private TextMeshProUGUI magnetTimerText;
-    [SerializeField] private GameObject magnetTimerGroup;
-
-    private void Update()
-    {
-        var sh = GameRefs.PlayerShield;
-        if (sh != null && sh.IsActive)
-        {
-            if (shieldTimerGroup) shieldTimerGroup.SetActive(true);
-            if (shieldTimerText) shieldTimerText.text = Mathf.CeilToInt(sh.Remaining).ToString();
-        }
-        else
-        {
-            if (shieldTimerGroup) shieldTimerGroup.SetActive(false);
-        }
-
-        var mg = GameRefs.PlayerMagnet;
-        if (mg != null && mg.IsActive)
-        {
-            if (magnetTimerGroup) magnetTimerGroup.SetActive(true);
-            if (magnetTimerText) magnetTimerText.text = Mathf.CeilToInt(mg.Remaining).ToString();
-        }
-        else
-        {
-            if (magnetTimerGroup) magnetTimerGroup.SetActive(false);
         }
     }
 }

@@ -164,7 +164,7 @@ PlayerSettings:
   androidMinAspectRatio: 1
   applicationIdentifier:
     Android: com.DefaultCompany.Skedaddler
-    Standalone: 
+    Standalone: com.DefaultCompany.Skedaddler
     Tizen: 
     iPhone: 
     tvOS: 

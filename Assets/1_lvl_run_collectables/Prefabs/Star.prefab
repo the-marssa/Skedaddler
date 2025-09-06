@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Star
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 73874cb76131d954bbdbec46f14b6cb3, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 73874cb76131d954bbdbec46f14b6cb3, type: 3}
+      propertyPath: m_TagString
+      value: Collectibles
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 73874cb76131d954bbdbec46f14b6cb3, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
@@ -136,10 +144,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  value: 1
-  effectSeconds: 5
-  rotateSpeed: 90
-  pickupVfx: {fileID: 0}
-  pickupSfx: {fileID: 8300000, guid: 1d74880bed4586644a16a79a2d9dc8af, type: 3}
-  pickupVolume: 0.486
-  destroyDelay: 0
+  targetTag: Player
+  amountOverride: -1
+  durationOverride: -1

@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ExtraLifeParticles
       objectReference: {fileID: 0}
+    - target: {fileID: 1470639489738500, guid: 9e2b957157514af40870bf65c60ae63f, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4027161941616386, guid: 9e2b957157514af40870bf65c60ae63f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -273,6 +277,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Heart
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 3aafbb15e0961c040828e4c3d29a19db, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 3aafbb15e0961c040828e4c3d29a19db, type: 3}
+      propertyPath: m_TagString
+      value: Collectibles
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 3aafbb15e0961c040828e4c3d29a19db, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
@@ -400,13 +412,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3abf8ee514e16f745abd8457aa866b5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  value: 1
-  effectSeconds: 5
-  rotateSpeed: 90
-  pickupVfx: {fileID: 0}
-  pickupSfx: {fileID: 0}
-  destroyDelay: 0
+  type: 0
+  targetTag: Player
+  amountOverride: -1
+  durationOverride: -1
 --- !u!4 &2458404737753499037 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 3aafbb15e0961c040828e4c3d29a19db,
