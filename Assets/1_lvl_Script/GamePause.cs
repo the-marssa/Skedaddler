@@ -7,26 +7,28 @@ public class GamePause : MonoBehaviour
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject hudRoot;
 
-    [Header("Off while Pause")]
+    [Header("While Paused")]
     [SerializeField] private Behaviour[] disableComponents;
     [SerializeField] private GameObject[] disableObjects;
     [SerializeField] private bool muteAudio = true;
 
-    [Header("Optional")]
-    [SerializeField] private GameResetter resetter; 
+    [Header("Exit to Menu")]
+    [SerializeField] private string MainMenu = "MainMenu";
+    [SerializeField] private int MainMenuBuildIndex = -1;
 
     private bool paused;
 
-    void Awake()
+    private void Awake()
     {
         if (pausePanel) pausePanel.SetActive(false);
         SetHudVisible(true);
     }
 
+    public void Toggle() { if (paused) Resume(); else Pause(); }
+
     public void Pause()
     {
-        if (paused) return;
-        paused = true;
+        if (paused) return; paused = true;
 
         Time.timeScale = 0f;
         if (muteAudio) AudioListener.pause = true;
@@ -40,35 +42,33 @@ public class GamePause : MonoBehaviour
 
     public void Resume()
     {
-        if (!paused) return;
-        paused = false;
+        if (!paused) return; paused = false;
 
-        Time.timeScale = 1f;
-        if (muteAudio) AudioListener.pause = false;
+        if (pausePanel) pausePanel.SetActive(false);
+        SetHudVisible(true);
 
         if (disableComponents != null) foreach (var c in disableComponents) if (c) c.enabled = true;
         if (disableObjects != null) foreach (var go in disableObjects) if (go) go.SetActive(true);
 
-        if (pausePanel) pausePanel.SetActive(false);
-        SetHudVisible(true);
+        Time.timeScale = 1f;
+        if (muteAudio) AudioListener.pause = false;
     }
 
-    public void Restart()
+    public void SaveAndExitToMenu()
     {
-        
-        if (resetter)
+        try
         {
-            Resume();               
-            resetter.RestartFromBeginning();
-            return;
+            StatsManager.Instance?.CacheLastRunForMenu();
+            StatsManager.Instance?.EndRun(false);
         }
+        catch { }
 
-        
         Time.timeScale = 1f;
         if (muteAudio) AudioListener.pause = false;
 
-        var scene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(scene.buildIndex);
+        if (MainMenuBuildIndex >= 0) SceneManager.LoadScene(MainMenuBuildIndex);
+        else if (!string.IsNullOrEmpty(MainMenu)) SceneManager.LoadScene(MainMenu);
+        else Debug.LogWarning("GamePause: MainMenu scene not set");
     }
 
     private void SetHudVisible(bool v)

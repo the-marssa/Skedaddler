@@ -1,87 +1,51 @@
-using System.Collections;
-using TMPro;
 using UnityEngine;
+using TMPro;
+using System.Collections;
+using VContainer;
 
 [DisallowMultipleComponent]
-public class CheckpointToastSimpleUI : MonoBehaviour
+public class CheckpointToastUI : MonoBehaviour
 {
     [SerializeField] private CheckpointManager checkpointManager;
     [SerializeField] private TMP_Text title;
     [SerializeField] private TMP_Text starsText;
     [SerializeField] private TMP_Text lettersText;
     [SerializeField] private CanvasGroup group;
+    [SerializeField] private float fadeIn = 0.2f;
+    [SerializeField] private float hold = 1.2f;
+    [SerializeField] private float fadeOut = 0.25f;
 
-    [Header("Timing (unscaled time)")]
-    [SerializeField, Min(0f)] private float fadeIn = 0.3f;
-    [SerializeField, Min(0f)] private float hold = 1.5f;
-    [SerializeField, Min(0f)] private float fadeOut = 0.3f;
+    private IRunSessionProvider _provider;
 
-    private Coroutine _cr;
+    [Inject] public void Construct(IRunSessionProvider provider) => _provider = provider;
 
-    private void Awake()
+    void Awake()
     {
-        if (!group) group = GetComponent<CanvasGroup>();
-        if (group)
-        {
-            group.alpha = 0f;               
-            group.interactable = false;
-            group.blocksRaycasts = false;
-        }
-        
+        if (!group) group = GetComponent<CanvasGroup>() ?? gameObject.AddComponent<CanvasGroup>();
+        group.alpha = 0f;
     }
 
-    private void OnEnable()
+    void OnEnable() { if (checkpointManager) checkpointManager.onCheckpointReached.AddListener(OnCP); }
+    void OnDisable() { if (checkpointManager) checkpointManager.onCheckpointReached.RemoveListener(OnCP); }
+
+    void OnCP(int cp, int score)
     {
-        if (checkpointManager != null)
-            checkpointManager.onCheckpointReached.AddListener(OnCheckpoint);
+        StopAllCoroutines();
+        var s = _provider?.Current;
+        if (title) title.text = $"Checkpoint {cp}";
+        if (starsText) starsText.text = $"Stars: {s?.Stars ?? score}";
+        if (lettersText) lettersText.text = $"Letters: {s?.Letters ?? 0}";
+        StartCoroutine(Show());
     }
 
-    private void OnDisable()
+    IEnumerator Show()
     {
-        if (checkpointManager != null)
-            checkpointManager.onCheckpointReached.RemoveListener(OnCheckpoint);
-        if (_cr != null) { StopCoroutine(_cr); _cr = null; }
-    }
-
-    private void OnCheckpoint(int index, int score)
-    {
-        if (title) title.text = $"опнцпея гаепефемн";
-
-        int stars = StatsManager.Instance != null ? StatsManager.Instance.CurrentRun.stars : score;
-        int letters = StatsManager.Instance != null ? StatsManager.Instance.CurrentRun.letters : 0;
-
-        if (starsText) starsText.text = stars.ToString();
-        if (lettersText) lettersText.text = letters.ToString();
-
-        if (_cr != null) StopCoroutine(_cr);
-        _cr = StartCoroutine(ShowRoutine());
-    }
-
-    private IEnumerator ShowRoutine()
-    {
-      
         float t = 0f;
-        while (t < fadeIn)
-        {
-            t += Time.unscaledDeltaTime;
-            if (group) group.alpha = Mathf.Clamp01(t / Mathf.Max(0.0001f, fadeIn));
-            yield return null;
-        }
-        if (group) group.alpha = 1f;
-
-       
-        yield return new WaitForSecondsRealtime(hold);
-
-       
+        while (t < fadeIn) { t += Time.unscaledDeltaTime; group.alpha = Mathf.Clamp01(t / fadeIn); yield return null; }
+        float h = 0f;
+        while (h < hold) { h += Time.unscaledDeltaTime; yield return null; }
         t = 0f;
-        while (t < fadeOut)
-        {
-            t += Time.unscaledDeltaTime;
-            if (group) group.alpha = 1f - Mathf.Clamp01(t / Mathf.Max(0.0001f, fadeOut));
-            yield return null;
-        }
-        if (group) group.alpha = 0f;
-
-        _cr = null;
+        while (t < fadeOut) { t += Time.unscaledDeltaTime; group.alpha = 1f - Mathf.Clamp01(t / fadeOut); yield return null; }
+        group.alpha = 0f;
     }
 }

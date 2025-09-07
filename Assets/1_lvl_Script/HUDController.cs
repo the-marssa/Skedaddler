@@ -9,15 +9,16 @@ public class HUDController : MonoBehaviour
     [Header("Score")]
     [SerializeField] private TextMeshProUGUI scoreText;
 
+    [Header("Letters")]
+    [SerializeField] private TextMeshProUGUI lettersText;
+
     [Header("HP UI")]
     [SerializeField] private Slider hpSlider;
     [SerializeField] private TextMeshProUGUI hpText;
 
-    [Header("Letters")]
-    [SerializeField] private TextMeshProUGUI lettersText;
-
     [Header("References")]
     [SerializeField] private PlayerHealth health;
+    [SerializeField] private PlayerDeath death; 
 
     [Header("Game Over UI")]
     [SerializeField] private TextMeshProUGUI gameOverLabel;
@@ -25,14 +26,14 @@ public class HUDController : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private bool pauseOnGameOver = true;
 
-    [Header("Hide on Game Over (optional, kept active)")]
+    [Header("Hide on Game Over")]
     [SerializeField] private GameObject[] hideOnGameOver;
 
     [Header("Timings (unscaled)")]
     [SerializeField] private float labelFadeInDuration = 1f;
     [SerializeField] private float labelHoldSeconds = 3f;
     [SerializeField] private float labelFadeOutDuration = 1f;
-    [SerializeField] private float deathFxDuration = 0.8f; 
+    [SerializeField] private float deathFxDuration = 0.8f;
 
     [Header("Power-up Timers")]
     [SerializeField] private TextMeshProUGUI shieldTimerText;
@@ -62,15 +63,14 @@ public class HUDController : MonoBehaviour
 
     private void Start()
     {
-        if (hpSlider != null) { hpSlider.minValue = HpMin; hpSlider.maxValue = HpMax; }
+        if (hpSlider) { hpSlider.minValue = HpMin; hpSlider.maxValue = HpMax; }
 
-        
-        if (health != null)
+        if (health)
         {
             int startHp = Mathf.Clamp(health.Current, HpMin, HpMax);
             _lastHp = startHp;
-            if (hpSlider != null) hpSlider.value = startHp;
-            if (hpText != null) hpText.text = $"{startHp}/{HpMax}";
+            if (hpSlider) hpSlider.value = startHp;
+            if (hpText) hpText.text = $"{startHp}/{HpMax}";
         }
 
         var s = _provider?.Current;
@@ -82,9 +82,9 @@ public class HUDController : MonoBehaviour
             if (lettersText) lettersText.text = $"x {s.Letters}";
         }
 
-        if (gameOverLabel != null) gameOverLabel.gameObject.SetActive(false);
-        if (gameOverPanel != null) gameOverPanel.SetActive(false);
-        if (gameOverLabelGroup != null) gameOverLabelGroup.alpha = 0f;
+        if (gameOverLabel) gameOverLabel.gameObject.SetActive(false);
+        if (gameOverPanel) gameOverPanel.SetActive(false);
+        if (gameOverLabelGroup) gameOverLabelGroup.alpha = 0f;
     }
 
     private void OnDisable()
@@ -94,7 +94,7 @@ public class HUDController : MonoBehaviour
 
     private void Update()
     {
-        if (health != null)
+        if (health)
         {
             int hp = Mathf.Clamp(health.Current, HpMin, HpMax);
             if (hp != _lastHp)
@@ -103,32 +103,20 @@ public class HUDController : MonoBehaviour
                 if (hpSlider) hpSlider.value = hp;
                 if (hpText) hpText.text = $"{hp}/{HpMax}";
 
-                if (!_gameOverStarted && hp <= HpMin)
-                {
-                    if (isActiveAndEnabled && _gameOverCR == null)
-                        _gameOverCR = StartCoroutine(GameOverSequence());
-                }
+                if (!_gameOverStarted && hp <= HpMin && isActiveAndEnabled && _gameOverCR == null)
+                    _gameOverCR = StartCoroutine(GameOverSequence());
             }
         }
 
         var s = _provider?.Current;
         if (s != null)
         {
-            if (s.Stars != _lastStars)
-            {
-                _lastStars = s.Stars;
-                if (scoreText) scoreText.text = $"x {s.Stars}";
-            }
-            if (s.Letters != _lastLetters)
-            {
-                _lastLetters = s.Letters;
-                if (lettersText) lettersText.text = $"x {s.Letters}";
-            }
+            if (s.Stars != _lastStars) { _lastStars = s.Stars; if (scoreText) scoreText.text = $"x {s.Stars}"; }
+            if (s.Letters != _lastLetters) { _lastLetters = s.Letters; if (lettersText) lettersText.text = $"x {s.Letters}"; }
         }
 
         if (_powerups != null)
         {
-            
             if (_powerups.IsShieldActive)
             {
                 if (shieldTimerGroup) shieldTimerGroup.SetActive(true);
@@ -136,7 +124,6 @@ public class HUDController : MonoBehaviour
             }
             else if (shieldTimerGroup) shieldTimerGroup.SetActive(false);
 
-           
             if (_powerups.IsMagnetActive)
             {
                 if (magnetTimerGroup) magnetTimerGroup.SetActive(true);
@@ -150,10 +137,17 @@ public class HUDController : MonoBehaviour
     {
         _gameOverStarted = true;
 
+        if (death) death.Play();
         yield return new WaitForSeconds(deathFxDuration);
 
-        SetGameplayUIVisible(false);
+        try
+        {
+            StatsManager.Instance?.CacheLastRunForMenu();
+            StatsManager.Instance?.EndRun(true);
+        }
+        catch { }
 
+        SetGameplayUIVisible(false);
         if (pauseOnGameOver) Time.timeScale = 0f;
 
         if (gameOverPanel != null) gameOverPanel.SetActive(false);

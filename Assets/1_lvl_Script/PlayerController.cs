@@ -1,178 +1,147 @@
 using Dreamteck.Forever;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using JSAM;
 using MoreMountains.Feedbacks;
 
 [RequireComponent(typeof(Runner))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private Runner _runner;
-    [SerializeField] private float _joystickSensitivity = 2f;
-    [SerializeField] private float _maxOffset = 5f;
+    [Header("Forever")]
+    [SerializeField] private Runner runner;
 
-    [Header("Smoothing")]
-    [SerializeField] private float _lateralSpeed = 4f;
-    [SerializeField, Range(0.02f, 0.3f)] private float _xSmoothTime = 0.10f;
-    [SerializeField] private float _xMaxSpeed = 100f;
-    [SerializeField, Range(0f, 0.3f)] private float _inputDeadZone = 0.08f;
+    [Header("Input")]
+    public float joystickSensitivity = 2f;
+    [Range(0f, 0.3f)] public float inputDeadZone = 0.08f;
 
-    [Header("Animator")]
-    [SerializeField] private Animator _anim;
-    [SerializeField] private string _jumpTrigger = "Jump";
-    [SerializeField] private string _hitTrigger = "Hit";
+    [Header("Lateral Move")]
+    [SerializeField] private float maxOffset = 5f;
+    public float xSmoothTime = 0.10f;
+    [SerializeField] private float xMaxSpeed = 100f;
 
     [Header("Jump")]
-    [SerializeField] private float _jumpHeight = 1.9f;
-    [SerializeField] private float _jumpDuration = 0.8f;
+    [SerializeField] private Animator anim;
+    [SerializeField] private string jumpTrigger = "Jump";
+    public float jumpHeight = 1.9f;
+    [SerializeField] private float jumpDuration = 0.8f;
+    [SerializeField] private MMF_Player jumpStartFx;
+    [SerializeField] private MMF_Player jumpLandFx;
 
-    [Header("Hit / Pause forward")]
-    [SerializeField] private float _hitLockTime = 1.2f;
-    [SerializeField] private Runner _forwardDriver;
+    [Header("Hit lock")]
+    [SerializeField] private string hitTrigger = "Hit";
+    [SerializeField] private float hitLockTime = 1.2f;
 
-    [Header("FEEL")]
-    [SerializeField] private MMF_Player jumpStartFx; 
-    [SerializeField] private MMF_Player jumpLandFx; 
+    private RunController input;
+    private float addValue;
+    private float targetX;
+    private float xVel;
+    private bool controlsLocked;
+    private bool isJumping;
+    private float jumpT;
 
-    private RunController _inputController;
-    private float _targetX;
-    private float _addValue;
-    private float _verticalOffset;
-    private bool _isJumping;
-    private bool _controlsLocked;
-    private bool _inHit;
-    private float _xVel;
+    public bool ControlsLocked => controlsLocked;
 
     private void Awake()
     {
-        if (_runner == null) _runner = GetComponent<Runner>();
-        if (_anim == null) _anim = GetComponent<Animator>();
-        if (_forwardDriver == null) _forwardDriver = GetComponent<Runner>();
+        if (!runner) runner = GetComponent<Runner>();
+        if (!anim) anim = GetComponentInChildren<Animator>();
 
-        GameRefs.PlayerController = this;
+        input = new RunController();
+        input.Default.Move.performed += OnMove;
+        input.Default.Move.canceled += OnMove;
+        input.Default.Jump.performed += OnJump;
 
-        _inputController = new RunController();
-        SubscribeEvents();
-
-        _targetX = _runner != null ? _runner.motion.offset.x : 0f;
+        targetX = runner ? runner.motion.offset.x : 0f;
     }
 
-    private void OnEnable() => _inputController.Enable();
-    private void OnDisable() => _inputController.Disable();
+    private void OnEnable() => input.Enable();
+    private void OnDisable() => input.Disable();
+
     private void OnDestroy()
     {
-        UnsubscribeEvents();
-        _inputController.Dispose();
-        if (GameRefs.PlayerController == this) GameRefs.PlayerController = null;
-    }
-
-    private void SubscribeEvents()
-    {
-        _inputController.Default.Move.performed += OnMovePerformed;
-        _inputController.Default.Move.canceled += OnMoveCanceled;
-        _inputController.Default.Jump.performed += OnJumpPerformed;
-    }
-
-    private void UnsubscribeEvents()
-    {
-        _inputController.Default.Move.performed -= OnMovePerformed;
-        _inputController.Default.Move.canceled -= OnMoveCanceled;
-        _inputController.Default.Jump.performed -= OnJumpPerformed;
-    }
-
-    private void OnMovePerformed(InputAction.CallbackContext ctx)
-    {
-        if (_controlsLocked) return;
-        float x = ctx.ReadValue<Vector2>().x;
-        _addValue = (Mathf.Abs(x) < _inputDeadZone) ? 0f : x * _joystickSensitivity;
-    }
-
-    private void OnMoveCanceled(InputAction.CallbackContext ctx)
-    {
-        _addValue = 0f;
-        if (_runner != null) _targetX = _runner.motion.offset.x;
-    }
-
-    private void OnJumpPerformed(InputAction.CallbackContext ctx)
-    {
-       
-        jumpStartFx?.PlayFeedbacks();
-
-        if (_anim != null) _anim.SetTrigger(_jumpTrigger);
-
-        if (!_isJumping)
-        {
-            JSAM.AudioManager.PlaySound(Run_audiolibrarySounds.Jump_sfx, transform);
-            StartCoroutine(JumpRoutine());
-        }
-    }
-
-    private IEnumerator JumpRoutine()
-    {
-        _isJumping = true;
-        float t = 0f;
-        while (t < 1f)
-        {
-            t += Time.deltaTime / Mathf.Max(0.01f, _jumpDuration);
-            _verticalOffset = Mathf.Sin(t * Mathf.PI) * _jumpHeight;
-            yield return null;
-        }
-        _verticalOffset = 0f;
-        jumpLandFx?.PlayFeedbacks();
-        _isJumping = false;
+        input.Default.Move.performed -= OnMove;
+        input.Default.Move.canceled -= OnMove;
+        input.Default.Jump.performed -= OnJump;
+        input.Dispose();
     }
 
     private void Update()
     {
-        if (_runner == null) return;
+        if (!runner) return;
 
-        _targetX = Mathf.Clamp(
-            _targetX + _addValue * _lateralSpeed * Time.deltaTime,
-            -_maxOffset, _maxOffset
-        );
+        if (!controlsLocked)
+            targetX = Mathf.Clamp(targetX + addValue * Time.deltaTime, -maxOffset, maxOffset);
 
-        float newX = Mathf.SmoothDamp(
-            _runner.motion.offset.x,
-            _targetX,
-            ref _xVel,
-            _xSmoothTime,
-            _xMaxSpeed
-        );
+        var motion = runner.motion;
+        float curX = motion.offset.x;
+        float y = motion.offset.y;
 
-        _runner.motion.offset = new Vector2(newX, _verticalOffset);
+        float newX = Mathf.SmoothDamp(curX, targetX, ref xVel, xSmoothTime, xMaxSpeed);
+
+        if (isJumping)
+        {
+            jumpT += Time.deltaTime / Mathf.Max(0.01f, jumpDuration);
+            float t = Mathf.Clamp01(jumpT);
+            y = 4f * jumpHeight * t * (1f - t);
+            if (t >= 1f)
+            {
+                isJumping = false;
+                jumpLandFx?.PlayFeedbacks();
+            }
+        }
+
+        runner.motion.offset = new Vector2(newX, y);
     }
 
-    public void TryHit()
+    private void OnMove(InputAction.CallbackContext ctx)
     {
-        if (_isJumping || _inHit) return;
-        if (_anim != null) _anim.SetTrigger(_hitTrigger);
-        StartCoroutine(HitLock());
+        var x = ctx.ReadValue<Vector2>().x;
+        addValue = Mathf.Abs(x) < inputDeadZone ? 0f : x * joystickSensitivity;
     }
 
-    private IEnumerator HitLock()
+    private void OnJump(InputAction.CallbackContext _)
     {
-        _inHit = true;
-        _controlsLocked = true;
-        _addValue = 0f;
-
-        if (_forwardDriver != null) _forwardDriver.enabled = false;
-
-        yield return new WaitForSeconds(_hitLockTime);
-
-        if (_forwardDriver != null) _forwardDriver.enabled = true;
-
-        _controlsLocked = false;
-        _inHit = false;
+        if (controlsLocked || isJumping) return;
+        isJumping = true;
+        jumpT = 0f;
+        anim?.SetTrigger(jumpTrigger);
+        jumpStartFx?.PlayFeedbacks();
     }
 
-    public void ResetOffset() { _targetX = 0f; }
-    public void ApplyConfig(float lateralSpeed, float xSmoothTime, float inputDeadZone, float jumpHeight)
+    public void HitPause()
     {
-        _lateralSpeed = lateralSpeed;
-        _xSmoothTime = xSmoothTime;
-        _inputDeadZone = inputDeadZone;
-        _jumpHeight = jumpHeight;
+        if (controlsLocked) return;
+        controlsLocked = true;
+        anim?.SetTrigger(hitTrigger);
+        Invoke(nameof(UnlockControls), hitLockTime);
     }
 
+    public void LockControls() => controlsLocked = true;
+    public void UnlockControls() => controlsLocked = false;
+
+    public void ResetForRun(float startOffsetX = 0f)
+    {
+        addValue = 0f;
+        xVel = 0f;
+        controlsLocked = false;
+
+        isJumping = false;
+        jumpT = 0f;
+
+        targetX = Mathf.Clamp(startOffsetX, -maxOffset, maxOffset);
+
+        
+        if (anim)
+        {
+            anim.ResetTrigger(jumpTrigger);
+            anim.ResetTrigger(hitTrigger);
+            anim.applyRootMotion = false; 
+            anim.Rebind();
+            anim.Update(0f);
+        }
+
+        if (runner)
+        {
+            runner.motion.offset = new Vector2(targetX, 0f);
+        }
+    }
 }

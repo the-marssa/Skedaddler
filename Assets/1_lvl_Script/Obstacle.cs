@@ -1,7 +1,9 @@
 using UnityEngine;
-using JSAM; 
+using VContainer;
+using JSAM;
 
 [RequireComponent(typeof(Collider))]
+[DisallowMultipleComponent]
 public class Obstacle : MonoBehaviour
 {
     [SerializeField] private int damage = 1;
@@ -17,12 +19,9 @@ public class Obstacle : MonoBehaviour
     [SerializeField] private ParticleSystem vfx;
     [SerializeField] private AudioSource sfx;
 
-    [Header("Sound (JSAM Sound Library)")]
-    [Tooltip("Obstacle sound from JSAM Sound Library")]
+    [Header("Sound (JSAM)")]
     [SerializeField] private Run_audiolibrarySounds hitJsamSound = Run_audiolibrarySounds.Bin_sfx;
-    [Tooltip("3D")]
     [SerializeField] private bool playJsam3DFromThis = true;
-    [Tooltip("Play JSAM-sound ")]
     [SerializeField] private bool playJsamSound = true;
 
     [Header("Lifecycle")]
@@ -32,53 +31,51 @@ public class Obstacle : MonoBehaviour
 
     private bool consumed;
 
-    private void OnTriggerEnter(Collider other) { Handle(other); }
-    private void OnCollisionEnter(Collision col) { Handle(col.collider); }
+    private IPlayerPowerups _powerups;
+    private IPlayerHealth _health;
+
+    [Inject]
+    public void Construct(IPlayerPowerups powerups, IPlayerHealth health)
+    {
+        _powerups = powerups;
+        _health = health;
+    }
+
+    private void OnTriggerEnter(Collider other) => Handle(other);
+    private void OnCollisionEnter(Collision col) => Handle(col.collider);
 
     private void Handle(Collider col)
     {
-        if (consumed) return;
-        if (!col.CompareTag(targetTag)) return;
-
-        bool shieldActive = (GameRefs.PlayerShield != null) && GameRefs.PlayerShield.IsActive;
+        if (consumed || !col.CompareTag(targetTag)) return;
         consumed = true;
 
-        if (!shieldActive)
-        {
-            if (GameRefs.PlayerController != null) GameRefs.PlayerController.TryHit();
-            if (GameRefs.PlayerHealth != null) GameRefs.PlayerHealth.TakeDamage(damage);
-        }
+        if (!(_powerups?.IsShieldActive ?? false))
+            _health?.TakeDamage(Mathf.Max(1, damage));
 
-        
-        if (animator != null && !string.IsNullOrEmpty(triggerName)) animator.SetTrigger(triggerName);
-        else if (legacyAnimation != null)
+        if (animator && !string.IsNullOrEmpty(triggerName)) animator.SetTrigger(triggerName);
+        else if (legacyAnimation)
         {
             if (!string.IsNullOrEmpty(legacyClipName)) legacyAnimation.Play(legacyClipName);
             else legacyAnimation.Play();
         }
-        if (vfx != null) vfx.Play();
-        if (sfx != null) sfx.Play();
+        if (vfx) vfx.Play();
+        if (sfx) sfx.Play();
 
-     
         if (playJsamSound)
         {
             if (playJsam3DFromThis) AudioManager.PlaySound(hitJsamSound, transform);
             else AudioManager.PlaySound(hitJsamSound);
         }
 
-        
         if (disableAfterHit)
         {
             if (collidersToDisable != null && collidersToDisable.Length > 0)
-            {
-                for (int i = 0; i < collidersToDisable.Length; i++)
-                    if (collidersToDisable[i] != null) collidersToDisable[i].enabled = false;
-            }
-            else
-            {
-                Collider selfCol = GetComponent<Collider>();
-                if (selfCol != null) selfCol.enabled = false;
-            }
+                foreach (var c in collidersToDisable) if (c) c.enabled = false;
+                    else
+                    {
+                        var selfCol = GetComponent<Collider>();
+                        if (selfCol) selfCol.enabled = false;
+                    }
 
             if (removeDelay > 0f) Destroy(gameObject, removeDelay);
         }

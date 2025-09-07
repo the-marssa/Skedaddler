@@ -2220,7 +2220,8 @@ GameObject:
   - component: {fileID: 4000011607790234}
   - component: {fileID: -2322452412905070432}
   - component: {fileID: -924892877233876536}
-  - component: {fileID: 1692955641453895180}
+  - component: {fileID: 5461941815965877311}
+  - component: {fileID: 7682498280161256970}
   m_Layer: 0
   m_Name: 5
   m_TagString: Untagged
@@ -2567,40 +2568,6 @@ MonoBehaviour:
     colliders: []
     _isRoot: 0
   - transform: {fileID: 8845545371796315074}
-    localRotation: {x: 0, y: 0, z: 0, w: 1}
-    extrudedMesh: {fileID: 0}
-    extrusionSpriteVertices: []
-    extrusionSpriteUVs: []
-    extrusionSpriteRect:
-      serializedVersion: 2
-      x: 0
-      y: 0
-      width: 0
-      height: 0
-    extrudedCollisionMesh: {fileID: 0}
-    _extrusionSettings:
-      meshColliderHandling: 0
-      bendSpline: 0
-      boundsInclusion: -1
-      indexing: 0
-      applyRotation: 1
-      keepUpright: 0
-      upVector: {x: 0, y: 1, z: 0}
-      applyScale: 0
-      bendMesh: 0
-      bendSprite: 0
-      bendPolygonCollider: 0
-      applyMeshColors: 0
-    _settingsComponent: {fileID: 0}
-    overrideSettingsComponent: 0
-    meshFilter: {fileID: 0}
-    meshCollider: {fileID: 0}
-    spriteRenderer: {fileID: 0}
-    splineComputer: {fileID: 0}
-    editSplinePoints: []
-    colliders: []
-    _isRoot: 0
-  - transform: {fileID: 6669007872935614475}
     localRotation: {x: 0, y: 0, z: 0, w: 1}
     extrudedMesh: {fileID: 0}
     extrusionSpriteVertices: []
@@ -3555,8 +3522,8 @@ MonoBehaviour:
   drawEntranceAndExit: 1
   drawBounds: 1
   drawCustomPaths: 1
-  editorChildCount: 36
---- !u!114 &1692955641453895180
+  editorChildCount: 35
+--- !u!114 &5461941815965877311
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3571,26 +3538,38 @@ MonoBehaviour:
   entries:
   - prefab: {fileID: 1036246193485675744, guid: 9bc2076536ad0a749a1bd13d276af469,
       type: 3}
-    weight: 0.8
+    weight: 1
   - prefab: {fileID: 2458404737753078205, guid: 35590398b83799c459fc888aa13e398d,
       type: 3}
-    weight: 0.05
+    weight: 0.2
   - prefab: {fileID: 7753728971606300541, guid: 7fdda124fffcc704a9186f3d2715dda1,
       type: 3}
-    weight: 0.05
+    weight: 0.6
   - prefab: {fileID: 5886910388680056955, guid: 7dcab4bc55595cf4e8c4d2ea118c79b5,
       type: 3}
-    weight: 0.05
+    weight: 0.15
   - prefab: {fileID: 5103192299624904991, guid: 3965e71e02f85994ba6d3100e9b57560,
       type: 3}
-    weight: 0.05
+    weight: 0.15
   pointsParent: {fileID: 2059650861939875371}
-  spawnProbability: 0.5
-  yOffset: 0.2
+  spawnProbability: 0.65
+  yOffset: 0
   useSeed: 0
   randomSeed: 12345
   player: {fileID: 0}
-  despawnBehind: 15
+  despawnBehind: 0
+--- !u!114 &7682498280161256970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013956375748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e27362559c44cbf45961bcd13d1fd94b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1000013964063962
 GameObject:
   m_ObjectHideFlags: 0
@@ -3872,37 +3851,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2059650861939875371}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3118127819326935570
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6669007872935614475}
-  m_Layer: 0
-  m_Name: 8
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6669007872935614475
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3118127819326935570}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.3, z: 13}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2059650861939875371}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3509482348086912941
 GameObject:
   m_ObjectHideFlags: 0
@@ -3940,7 +3888,6 @@ Transform:
   - {fileID: 5574647853435468528}
   - {fileID: 7217391804878866516}
   - {fileID: 8845545371796315074}
-  - {fileID: 6669007872935614475}
   m_Father: {fileID: 4000011607790234}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3224160906152456873

@@ -9,65 +9,42 @@ public class CheckpointManager : MonoBehaviour
     [SerializeField] private int[] scoreThresholds = new int[] { 10, 50, 100, 150 };
 
     [Header("Events")]
-    [SerializeField] public UnityEvent<int, int> onCheckpointReached;
+    public UnityEvent<int, int> onCheckpointReached; 
 
-    private int nextIndex;                
-    private long lastRunStartTicks = -1;   
+    int nextIndex;
+    long lastRunStartTicks = -1;
 
-    private void OnEnable()
-    {
-        TrySubscribe();
-        ResetForCurrentRun(); 
-    }
+    void OnEnable() { TrySubscribe(); ResetForCurrentRun(); }
+    void OnDisable() { if (StatsManager.Instance != null) StatsManager.Instance.OnScoreChanged -= HandleScoreChanged; }
 
-    private void OnDisable()
-    {
-        if (StatsManager.Instance != null)
-        {
-            StatsManager.Instance.OnScoreChanged -= HandleScoreChanged;
-           
-        }
-    }
-
-    private void TrySubscribe()
-    {
-        if (StatsManager.Instance == null) return;
-        StatsManager.Instance.OnScoreChanged -= HandleScoreChanged;
-        StatsManager.Instance.OnScoreChanged += HandleScoreChanged;
-    }
-
-    private void ResetForCurrentRun()
-    {
-        nextIndex = 0;
-        var sm = StatsManager.Instance;
-        lastRunStartTicks = (sm != null && sm.CurrentRun != null) ? sm.CurrentRun.startedAtTicks : -1;
-    }
-
-    private void HandleScoreChanged(int newScore)
+    void TrySubscribe()
     {
         var sm = StatsManager.Instance;
-        if (sm == null || sm.CurrentRun == null) return;
+        if (sm == null) return;
+        sm.OnScoreChanged -= HandleScoreChanged;
+        sm.OnScoreChanged += HandleScoreChanged;
+    }
 
-        
-        if (sm.CurrentRun.startedAtTicks != lastRunStartTicks)
-        {
-            ResetForCurrentRun();
-        }
+    void ResetForCurrentRun()
+    {
+        var sm = StatsManager.Instance;
+        if (sm == null || sm.CurrentRun == null) { nextIndex = 0; lastRunStartTicks = -1; return; }
+        if (sm.CurrentRun.startedAtTicks != lastRunStartTicks) { nextIndex = 0; lastRunStartTicks = sm.CurrentRun.startedAtTicks; }
+    }
 
-        if (nextIndex >= scoreThresholds.Length) return;
+    void HandleScoreChanged(int newScore)
+    {
+        var sm = StatsManager.Instance;
+        if (sm == null || sm.CurrentRun == null || scoreThresholds == null) return;
 
-        
         while (nextIndex < scoreThresholds.Length && newScore >= scoreThresholds[nextIndex])
         {
             int cpIndex = nextIndex + 1;
-
-            
             if (sm.CurrentRun.checkpointsReached < cpIndex)
             {
                 sm.CommitCheckpoint(cpIndex);
                 onCheckpointReached?.Invoke(cpIndex, newScore);
             }
-
             nextIndex++;
         }
     }

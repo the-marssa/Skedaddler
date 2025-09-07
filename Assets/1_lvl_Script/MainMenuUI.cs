@@ -25,7 +25,7 @@ public class MainMenuUI : MonoBehaviour
 
     public void OnPlay()
     {
-        if (resetter) resetter.PrepareNewRun();
+        resetter?.ResetToStartPanel();
         if (startScreenPanel) startScreenPanel.SetActive(true);
         if (mainMenuRoot) mainMenuRoot.SetActive(false);
     }
@@ -60,11 +60,9 @@ public class MainMenuUI : MonoBehaviour
         Time.timeScale = menuVisible ? 0f : 1f;
 
         if (disableWhileMenu != null)
-            foreach (var go in disableWhileMenu)
-                if (go) go.SetActive(!menuVisible);
+            foreach (var go in disableWhileMenu) if (go) go.SetActive(!menuVisible);
 
         if (disableComponentsMenu != null)
-            foreach (var c in disableComponentsMenu)
-                if (c) c.enabled = !menuVisible;
+            foreach (var c in disableComponentsMenu) if (c) c.enabled = !menuVisible;
     }
 }

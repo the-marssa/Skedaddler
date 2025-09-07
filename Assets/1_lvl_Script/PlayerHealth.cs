@@ -1,99 +1,73 @@
 using UnityEngine;
 using System;
-using JSAM;
-using MoreMountains.Feedbacks;
-using Lofelt.NiceVibrations;
 
-[DisallowMultipleComponent]
 public class PlayerHealth : MonoBehaviour, IPlayerHealth
 {
-    private const int ABS_MAX_HP = 20;
-
-    [SerializeField, Range(1, ABS_MAX_HP)] private int maxHP = ABS_MAX_HP;
-    [SerializeField, Min(0f)] private float hitCooldown = 0.5f;
+    [SerializeField] private int max = 20;
+    [SerializeField] private int start = 20;
 
     public int Current { get; private set; }
-    public int Max => Mathf.Min(maxHP, ABS_MAX_HP);
+    public int Max => max;
+    public bool IsDead { get; private set; }
 
     public event Action<int, int> Changed;
     public event Action Died;
 
-    private float lastHit = -999f;
-
-    [Header("FEEL")]
-    [SerializeField] private MMF_Player hitFx;
-
     private void Awake()
     {
+        max = Mathf.Max(1, max);
+        Current = Mathf.Clamp(start, 0, max);
+        IsDead = (Current <= 0);
+        Changed?.Invoke(Current, Max);
+        if (IsDead) SafeDie();
+    }
+
+    public void ResetFull()
+    {
+        IsDead = false;
         Current = Max;
-        GameRefs.PlayerHealth = this;
         Changed?.Invoke(Current, Max);
     }
 
-    private void OnDestroy()
+    public void Reset()
     {
-        if (GameRefs.PlayerHealth == this) GameRefs.PlayerHealth = null;
+        IsDead = false;
+        Current = Mathf.Clamp(start, 0, Max);
+        Changed?.Invoke(Current, Max);
+    }
+
+    public bool Heal(int amount)
+    {
+        if (amount <= 0) return false;
+        int before = Current;
+        Current = Mathf.Min(Max, Current + amount);
+        if (Current != before)
+        {
+            if (IsDead && Current > 0) IsDead = false;
+            Changed?.Invoke(Current, Max);
+            return true;
+        }
+        return false;
     }
 
     public bool TakeDamage(int amount)
     {
-        if (amount <= 0) return false;
-        if (Time.time - lastHit < hitCooldown || Current <= 0) return false;
-
-        lastHit = Time.time;
+        if (amount <= 0 || IsDead) return false;
+        int before = Current;
         Current = Mathf.Max(0, Current - amount);
-
-        AudioManager.PlaySound(Run_audiolibrarySounds.Hit_sfx);
-        hitFx?.PlayFeedbacks();
-        HapticPatterns.PlayPreset(HapticPatterns.PresetType.MediumImpact);
-
-        Changed?.Invoke(Current, Max);
-
-        if (Current == 0)
+        if (Current != before)
         {
-            Died?.Invoke();
             Changed?.Invoke(Current, Max);
+            if (Current == 0) SafeDie();
+            return true;
         }
-        return true;
+        return false;
     }
 
-   
-    public bool Heal(int amount)
+    private void SafeDie()
     {
-        if (amount <= 0 || Current <= 0) return false;
-        int prev = Current;
-        Current = Mathf.Min(Max, Current + amount);
-
-        if (Current != prev)
-        {
-            AudioManager.PlaySound(Run_audiolibrarySounds.Health_sfx);
-            Changed?.Invoke(Current, Max);
-        }
-        return Current != prev;
+        if (IsDead) return;
+        IsDead = true;
+        try { Died?.Invoke(); } catch { /* ignore */ }
     }
-
-    public void ResetHP()
-    {
-        Current = Max;
-        lastHit = -999f;
-        Changed?.Invoke(Current, Max);
-    }
-
-    public void Kill()
-    {
-        if (Current == 0) return;
-        Current = 0;
-        Changed?.Invoke(Current, Max);
-        Died?.Invoke();
-        Changed?.Invoke(Current, Max);
-    }
-
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        if (maxHP < 1) maxHP = 1;
-        if (maxHP > ABS_MAX_HP) maxHP = ABS_MAX_HP;
-        if (hitCooldown < 0f) hitCooldown = 0f;
-    }
-#endif
 }
