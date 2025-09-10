@@ -1784,8 +1784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entries:
-  - prefab: {fileID: 1036246193485675744, guid: 9bc2076536ad0a749a1bd13d276af469,
-      type: 3}
+  - prefab: {fileID: 1091416861932012, guid: d11c03cec4369ea4aa3d29744046d625, type: 3}
     weight: 1
   - prefab: {fileID: 2458404737753078205, guid: 35590398b83799c459fc888aa13e398d,
       type: 3}
@@ -1793,10 +1792,9 @@ MonoBehaviour:
   - prefab: {fileID: 7753728971606300541, guid: 7fdda124fffcc704a9186f3d2715dda1,
       type: 3}
     weight: 0.6
-  - prefab: {fileID: 5886910388680056955, guid: 7dcab4bc55595cf4e8c4d2ea118c79b5,
-      type: 3}
+  - prefab: {fileID: 659461991414771745, guid: 07f807ea802585d4088efc2be18db47b, type: 3}
     weight: 0.15
-  - prefab: {fileID: 5103192299624904991, guid: 3965e71e02f85994ba6d3100e9b57560,
+  - prefab: {fileID: 3241196014341189734, guid: 327860819d06a964d98cea7acb224d6e,
       type: 3}
     weight: 0.15
   pointsParent: {fileID: 2337460345927080054}

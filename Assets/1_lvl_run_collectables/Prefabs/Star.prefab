@@ -72,10 +72,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5561960015392242649}
-    - targetCorrespondingSourceObject: {fileID: 100000, guid: 73874cb76131d954bbdbec46f14b6cb3,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5933096399668785484}
   m_SourcePrefab: {fileID: 100100000, guid: 73874cb76131d954bbdbec46f14b6cb3, type: 3}
 --- !u!1 &1036246193485675744 stripped
 GameObject:
@@ -131,20 +127,3 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.26600242
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5933096399668785484
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1036246193485675744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3abf8ee514e16f745abd8457aa866b5b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 1
-  targetTag: Player
-  amountOverride: -1
-  durationOverride: -1
-  consumeEvenIfNoHeal: 0
