@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 4613131010902594}
   - component: {fileID: 688763257542339155}
   - component: {fileID: -5362090027170275387}
-  - component: {fileID: -742812351709778722}
-  m_Layer: 0
+  - component: {fileID: 372173884924515843}
+  m_Layer: 7
   m_Name: Bank_sign Prefab
-  m_TagString: Untagged
+  m_TagString: Star
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -83,7 +83,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-742812351709778722
+--- !u!114 &372173884924515843
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,14 +92,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1091416861932012}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3abf8ee514e16f745abd8457aa866b5b, type: 3}
+  m_Script: {fileID: 11500000, guid: 98acd8a3b34c00d409becb25948a6216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
-  targetTag: Player
-  amountOverride: -1
-  durationOverride: -1
-  consumeEvenIfNoHeal: 0
+  kind: 0
+  amount: 1
+  destroyOnPickup: 1
 --- !u!1 &1486713830176428
 GameObject:
   m_ObjectHideFlags: 0
@@ -112,7 +110,7 @@ GameObject:
   - component: {fileID: 33668865753327264}
   - component: {fileID: 23735921203087378}
   - component: {fileID: 65761507886620018}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bank_sign
   m_TagString: Untagged
   m_Icon: {fileID: 0}

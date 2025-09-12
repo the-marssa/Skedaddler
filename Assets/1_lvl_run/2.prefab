@@ -897,8 +897,7 @@ GameObject:
   - component: {fileID: 4000013987384080}
   - component: {fileID: 3765296431387082621}
   - component: {fileID: 4625083660604678667}
-  - component: {fileID: 7609107612729723759}
-  - component: {fileID: 4735476383792523726}
+  - component: {fileID: 8632629435676689328}
   m_Layer: 0
   m_Name: 2
   m_TagString: Untagged
@@ -1814,7 +1813,7 @@ MonoBehaviour:
   drawBounds: 1
   drawCustomPaths: 1
   editorChildCount: 24
---- !u!114 &7609107612729723759
+--- !u!114 &8632629435676689328
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1823,42 +1822,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000014182718406}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1b95ee5758f46646a3377cec5faae8f, type: 3}
+  m_Script: {fileID: 11500000, guid: e51f73355225d4b46904630da1f95267, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entries:
+  prefabs:
   - prefab: {fileID: 1091416861932012, guid: d11c03cec4369ea4aa3d29744046d625, type: 3}
-    weight: 1
+    weight: 0.6
   - prefab: {fileID: 2458404737753078205, guid: 35590398b83799c459fc888aa13e398d,
       type: 3}
-    weight: 0.2
+    weight: 0.15
   - prefab: {fileID: 7753728971606300541, guid: 7fdda124fffcc704a9186f3d2715dda1,
       type: 3}
-    weight: 0.6
+    weight: 0.1
   - prefab: {fileID: 659461991414771745, guid: 07f807ea802585d4088efc2be18db47b, type: 3}
-    weight: 0.15
+    weight: 0.08
   - prefab: {fileID: 3241196014341189734, guid: 327860819d06a964d98cea7acb224d6e,
       type: 3}
-    weight: 0.15
+    weight: 0.07
   pointsParent: {fileID: 5750499401535369073}
-  spawnProbability: 0.65
-  yOffset: 0
-  useSeed: 0
-  randomSeed: 12345
+  spawnProbability: 1
+  yOffset: 0.1
   player: {fileID: 0}
   despawnBehind: 0
---- !u!114 &4735476383792523726
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000014182718406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e27362559c44cbf45961bcd13d1fd94b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &476887680907496881
 GameObject:
   m_ObjectHideFlags: 0
@@ -2337,10 +2322,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 4888559973150103662}
-    - targetCorrespondingSourceObject: {fileID: 100000, guid: 3bbb4725b7e107143a0d7eeaa52be855,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5663533127742696034}
   m_SourcePrefab: {fileID: 100100000, guid: 3bbb4725b7e107143a0d7eeaa52be855, type: 3}
 --- !u!33 &2095733140675959664 stripped
 MeshFilter:
@@ -2375,41 +2356,9 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.6579897, y: 1.5496397, z: 0.42565697}
   m_Center: {x: 0.014855385, y: 0.81627154, z: 0.000000014901161}
---- !u!114 &5663533127742696034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2095733140679214960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ab0ce8a6c40ec14b9bfc143493481b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 1
-  targetTag: Player
-  animator: {fileID: 0}
-  triggerName: Hit
-  legacyAnimation: {fileID: 2095733140685987504}
-  legacyClipName: 
-  vfx: {fileID: 0}
-  sfx: {fileID: 0}
-  hitJsamSound: 6
-  playJsam3DFromThis: 1
-  playJsamSound: 1
-  disableAfterHit: 1
-  removeDelay: 1.2
-  collidersToDisable: []
 --- !u!4 &2095733140679383888 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 3bbb4725b7e107143a0d7eeaa52be855,
-    type: 3}
-  m_PrefabInstance: {fileID: 2095733140679246288}
-  m_PrefabAsset: {fileID: 0}
---- !u!111 &2095733140685987504 stripped
-Animation:
-  m_CorrespondingSourceObject: {fileID: 11100000, guid: 3bbb4725b7e107143a0d7eeaa52be855,
     type: 3}
   m_PrefabInstance: {fileID: 2095733140679246288}
   m_PrefabAsset: {fileID: 0}
@@ -2481,10 +2430,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8120355736984223249}
-    - targetCorrespondingSourceObject: {fileID: 100004, guid: 0d2b18ab5b0d98e4e96bce5fbaea35f7,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1653733346573975818}
   m_SourcePrefab: {fileID: 100100000, guid: 0d2b18ab5b0d98e4e96bce5fbaea35f7, type: 3}
 --- !u!1 &4923776489336580387 stripped
 GameObject:
@@ -2513,32 +2458,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1653733346573975818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4923776489336580387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ab0ce8a6c40ec14b9bfc143493481b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 1
-  targetTag: Player
-  animator: {fileID: 0}
-  triggerName: Hit
-  legacyAnimation: {fileID: 4923776489347576039}
-  legacyClipName: 
-  vfx: {fileID: 0}
-  sfx: {fileID: 0}
-  hitJsamSound: 5
-  playJsam3DFromThis: 1
-  playJsamSound: 1
-  disableAfterHit: 1
-  removeDelay: 1.2
-  collidersToDisable: []
 --- !u!4 &4923776489336616195 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400004, guid: 0d2b18ab5b0d98e4e96bce5fbaea35f7,
@@ -2566,12 +2485,6 @@ MeshFilter:
 --- !u!33 &4923776489337419047 stripped
 MeshFilter:
   m_CorrespondingSourceObject: {fileID: 3300000, guid: 0d2b18ab5b0d98e4e96bce5fbaea35f7,
-    type: 3}
-  m_PrefabInstance: {fileID: 4923776489336483719}
-  m_PrefabAsset: {fileID: 0}
---- !u!111 &4923776489347576039 stripped
-Animation:
-  m_CorrespondingSourceObject: {fileID: 11100000, guid: 0d2b18ab5b0d98e4e96bce5fbaea35f7,
     type: 3}
   m_PrefabInstance: {fileID: 4923776489336483719}
   m_PrefabAsset: {fileID: 0}

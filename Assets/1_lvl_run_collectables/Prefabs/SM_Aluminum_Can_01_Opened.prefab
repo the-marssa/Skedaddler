@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 3241196014341189729}
   - component: {fileID: 3705746621929118157}
   - component: {fileID: -2403156581546012251}
-  - component: {fileID: -649405529819818423}
-  m_Layer: 0
+  - component: {fileID: 6478024939030765645}
+  m_Layer: 7
   m_Name: SM_Aluminum_Can_01_Opened
-  m_TagString: Untagged
+  m_TagString: Shield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -85,7 +85,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.34, y: 2.91, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-649405529819818423
+--- !u!114 &6478024939030765645
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,14 +94,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3241196014341189734}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3abf8ee514e16f745abd8457aa866b5b, type: 3}
+  m_Script: {fileID: 11500000, guid: 98acd8a3b34c00d409becb25948a6216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
-  targetTag: Player
-  amountOverride: -1
-  durationOverride: -1
-  consumeEvenIfNoHeal: 0
+  kind: 4
+  amount: 1
+  destroyOnPickup: 1
 --- !u!1001 &1190256642525270599
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -110,10 +108,20 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3241196014341189729}
     m_Modifications:
+    - target: {fileID: 4875907273765177850, guid: 4bf39f506b1d5ee4caf537ccfe018a7c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 5869654171612050982, guid: 4bf39f506b1d5ee4caf537ccfe018a7c,
         type: 3}
       propertyPath: m_Name
       value: CL_Aluminum_Can_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5869654171612050982, guid: 4bf39f506b1d5ee4caf537ccfe018a7c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7637637249452406294, guid: 4bf39f506b1d5ee4caf537ccfe018a7c,
         type: 3}
@@ -244,10 +252,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3252384171246079698, guid: 6ba684b861bf7274ab05e3eb6ddfa15c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 6ba684b861bf7274ab05e3eb6ddfa15c,
         type: 3}
       propertyPath: m_Name
       value: SM_Aluminum_Can_01_Tab
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6ba684b861bf7274ab05e3eb6ddfa15c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4030685944203408725, guid: 6ba684b861bf7274ab05e3eb6ddfa15c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4210006274768025032, guid: 6ba684b861bf7274ab05e3eb6ddfa15c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4612681984566390766, guid: 6ba684b861bf7274ab05e3eb6ddfa15c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -323,10 +356,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5987782135364650810, guid: 5d1d87f04ccbaae4e97936c044e7ab18,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -733589758389426498, guid: 5d1d87f04ccbaae4e97936c044e7ab18,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5d1d87f04ccbaae4e97936c044e7ab18,
         type: 3}
       propertyPath: m_Name
       value: SM_Aluminum_Can_01_Opened
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5d1d87f04ccbaae4e97936c044e7ab18,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1281978898533366674, guid: 5d1d87f04ccbaae4e97936c044e7ab18,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3806200291083270622, guid: 5d1d87f04ccbaae4e97936c044e7ab18,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

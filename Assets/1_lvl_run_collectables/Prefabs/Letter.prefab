@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 3952221460528159478}
   - component: {fileID: 4136825143768713379}
-  - component: {fileID: 1655604005364574289}
   - component: {fileID: 5389250498131007276}
   - component: {fileID: 1408091882814506139}
+  - component: {fileID: 3530414750326831057}
   m_Layer: 7
   m_Name: Letter
-  m_TagString: Collectibles
+  m_TagString: Letter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -90,22 +90,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1655604005364574289
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7753728971606300541}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3abf8ee514e16f745abd8457aa866b5b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 2
-  targetTag: Player
-  amountOverride: -1
-  durationOverride: -1
 --- !u!54 &5389250498131007276
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -154,3 +138,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.19, y: 1.61, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3530414750326831057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7753728971606300541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98acd8a3b34c00d409becb25948a6216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  kind: 2
+  amount: 1
+  destroyOnPickup: 1

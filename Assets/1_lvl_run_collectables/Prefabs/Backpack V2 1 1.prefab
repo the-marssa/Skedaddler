@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 5249681625890447457}
   - component: {fileID: 5875450615461731868}
   - component: {fileID: 1249780061908725114}
-  - component: {fileID: 2495224576644835710}
-  m_Layer: 0
+  - component: {fileID: 8975948411980423623}
+  m_Layer: 7
   m_Name: Backpack V2 1 1
-  m_TagString: Untagged
+  m_TagString: Magnet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -83,7 +83,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.17832875
   m_Center: {x: 0, y: 0.00000001490116, z: 0.00000001490116}
---- !u!114 &2495224576644835710
+--- !u!114 &8975948411980423623
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,14 +92,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 659461991414771745}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3abf8ee514e16f745abd8457aa866b5b, type: 3}
+  m_Script: {fileID: 11500000, guid: 98acd8a3b34c00d409becb25948a6216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 3
-  targetTag: Player
-  amountOverride: -1
-  durationOverride: -1
-  consumeEvenIfNoHeal: 0
+  kind: 3
+  amount: 1
+  destroyOnPickup: 1
 --- !u!1 &7842464930779671568
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,7 +109,7 @@ GameObject:
   - component: {fileID: 1052721203275135599}
   - component: {fileID: 321028073762807271}
   - component: {fileID: 7304625367087275991}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Backpack1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

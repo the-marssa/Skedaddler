@@ -1,207 +1,61 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
-using System.Collections;
-using VContainer;
 
+[DisallowMultipleComponent]
 public class HUDController : MonoBehaviour
 {
-    [Header("Score")]
-    [SerializeField] private TextMeshProUGUI scoreText;
+    [Header("Text")]
+    [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private TMP_Text hpText;
+    [SerializeField] private TMP_Text defermentText;
 
-    [Header("Letters")]
-    [SerializeField] private TextMeshProUGUI lettersText;
-
-    [Header("HP UI")]
-    [SerializeField] private Slider hpSlider;
-    [SerializeField] private TextMeshProUGUI hpText;
-
-    [Header("References")]
-    [SerializeField] private PlayerHealth health;
-    [SerializeField] private PlayerDeath death; 
-
-    [Header("Game Over UI")]
-    [SerializeField] private TextMeshProUGUI gameOverLabel;
-    [SerializeField] private CanvasGroup gameOverLabelGroup;
-    [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private bool pauseOnGameOver = true;
-
-    [Header("Hide on Game Over")]
-    [SerializeField] private GameObject[] hideOnGameOver;
-
-    [Header("Timings (unscaled)")]
-    [SerializeField] private float labelFadeInDuration = 1f;
-    [SerializeField] private float labelHoldSeconds = 3f;
-    [SerializeField] private float labelFadeOutDuration = 1f;
-    [SerializeField] private float deathFxDuration = 0.8f;
-
-    [Header("Power-up Timers")]
-    [SerializeField] private TextMeshProUGUI shieldTimerText;
-    [SerializeField] private GameObject shieldTimerGroup;
-    [SerializeField] private TextMeshProUGUI magnetTimerText;
+    [Header("Timers UI (groups)")]
+    [SerializeField] private GameObject letterTimerGroup;
+    [SerializeField] private TMP_Text letterTimerText;
     [SerializeField] private GameObject magnetTimerGroup;
+    [SerializeField] private TMP_Text magnetTimerText;
+    [SerializeField] private GameObject shieldTimerGroup;
+    [SerializeField] private TMP_Text shieldTimerText;
 
-    private const int HpMin = 0;
-    private const int HpMax = 20;
+    private PlayerPowers powers;
 
-    private IRunSessionProvider _provider;
-    private IPlayerPowerups _powerups;
+    void Awake() { if (!powers) powers = FindFirstObjectByType<PlayerPowers>(); }
+    void OnEnable() => RefreshAll();
 
-    private int _lastHp = int.MinValue;
-    private int _lastStars = int.MinValue;
-    private int _lastLetters = int.MinValue;
-
-    private bool _gameOverStarted;
-    private Coroutine _gameOverCR;
-
-    [Inject]
-    public void Construct(IRunSessionProvider provider, IPlayerPowerups powerups)
+    void Update()
     {
-        _provider = provider;
-        _powerups = powerups;
-    }
-
-    private void Start()
-    {
-        if (hpSlider) { hpSlider.minValue = HpMin; hpSlider.maxValue = HpMax; }
-
-        if (health)
+        var gc = GameCore.Instance;
+        if (gc != null)
         {
-            int startHp = Mathf.Clamp(health.Current, HpMin, HpMax);
-            _lastHp = startHp;
-            if (hpSlider) hpSlider.value = startHp;
-            if (hpText) hpText.text = $"{startHp}/{HpMax}";
-        }
-
-        var s = _provider?.Current;
-        if (s != null)
-        {
-            _lastStars = s.Stars;
-            _lastLetters = s.Letters;
-            if (scoreText) scoreText.text = $"x {s.Stars}";
-            if (lettersText) lettersText.text = $"x {s.Letters}";
-        }
-
-        if (gameOverLabel) gameOverLabel.gameObject.SetActive(false);
-        if (gameOverPanel) gameOverPanel.SetActive(false);
-        if (gameOverLabelGroup) gameOverLabelGroup.alpha = 0f;
-    }
-
-    private void OnDisable()
-    {
-        if (_gameOverCR != null) { StopCoroutine(_gameOverCR); _gameOverCR = null; }
-    }
-
-    private void Update()
-    {
-        if (health)
-        {
-            int hp = Mathf.Clamp(health.Current, HpMin, HpMax);
-            if (hp != _lastHp)
+            var run = gc.CurrentRun;
+            if (run != null)
             {
-                _lastHp = hp;
-                if (hpSlider) hpSlider.value = hp;
-                if (hpText) hpText.text = $"{hp}/{HpMax}";
-
-                if (!_gameOverStarted && hp <= HpMin && isActiveAndEnabled && _gameOverCR == null)
-                    _gameOverCR = StartCoroutine(GameOverSequence());
+                if (scoreText) scoreText.text = run.score.ToString();
+                if (hpText) hpText.text = gc.HP.ToString();
             }
-        }
-
-        var s = _provider?.Current;
-        if (s != null)
-        {
-            if (s.Stars != _lastStars) { _lastStars = s.Stars; if (scoreText) scoreText.text = $"x {s.Stars}"; }
-            if (s.Letters != _lastLetters) { _lastLetters = s.Letters; if (lettersText) lettersText.text = $"x {s.Letters}"; }
-        }
-
-        if (_powerups != null)
-        {
-            if (_powerups.IsShieldActive)
+            else
             {
-                if (shieldTimerGroup) shieldTimerGroup.SetActive(true);
-                if (shieldTimerText) shieldTimerText.text = Mathf.CeilToInt(_powerups.ShieldRemaining).ToString();
-            }
-            else if (shieldTimerGroup) shieldTimerGroup.SetActive(false);
-
-            if (_powerups.IsMagnetActive)
-            {
-                if (magnetTimerGroup) magnetTimerGroup.SetActive(true);
-                if (magnetTimerText) magnetTimerText.text = Mathf.CeilToInt(_powerups.MagnetRemaining).ToString();
-            }
-            else if (magnetTimerGroup) magnetTimerGroup.SetActive(false);
-        }
-    }
-
-    private IEnumerator GameOverSequence()
-    {
-        _gameOverStarted = true;
-
-        if (death) death.Play();
-        yield return new WaitForSeconds(deathFxDuration);
-
-        try
-        {
-            StatsManager.Instance?.CacheLastRunForMenu();
-            StatsManager.Instance?.EndRun(true);
-        }
-        catch { }
-
-        SetGameplayUIVisible(false);
-        if (pauseOnGameOver) Time.timeScale = 0f;
-
-        if (gameOverPanel != null) gameOverPanel.SetActive(false);
-
-        if (gameOverLabel != null)
-        {
-            gameOverLabel.gameObject.SetActive(true);
-
-            if (gameOverLabelGroup != null)
-            {
-                gameOverLabelGroup.alpha = 0f;
-                float t = 0f;
-                while (t < labelFadeInDuration)
-                {
-                    t += Time.unscaledDeltaTime;
-                    gameOverLabelGroup.alpha = Mathf.Clamp01(t / labelFadeInDuration);
-                    yield return null;
-                }
+                if (scoreText) scoreText.text = "0";
+                if (hpText) hpText.text = gc.MaxHP.ToString();
             }
 
-            yield return new WaitForSecondsRealtime(labelHoldSeconds);
-
-            if (gameOverLabelGroup != null)
-            {
-                float t = 0f;
-                while (t < labelFadeOutDuration)
-                {
-                    t += Time.unscaledDeltaTime;
-                    gameOverLabelGroup.alpha = 1f - Mathf.Clamp01(t / labelFadeOutDuration);
-                    yield return null;
-                }
-            }
-
-            gameOverLabel.gameObject.SetActive(false);
+            if (defermentText) defermentText.text = gc.Save.lifetime.deferments.ToString();
         }
-        else
+
+        if (powers)
         {
-            yield return new WaitForSecondsRealtime(0.6f);
-        }
+            if (letterTimerGroup) letterTimerGroup.SetActive(powers.LetterSlowActive);
+            if (magnetTimerGroup) magnetTimerGroup.SetActive(powers.MagnetActive);
+            if (shieldTimerGroup) shieldTimerGroup.SetActive(powers.ShieldActive);
 
-        if (gameOverPanel != null) gameOverPanel.SetActive(true);
-        _gameOverCR = null;
+            if (letterTimerText && powers.LetterSlowActive)
+                letterTimerText.text = Mathf.CeilToInt(powers.LetterRemaining).ToString();
+            if (magnetTimerText && powers.MagnetActive)
+                magnetTimerText.text = Mathf.CeilToInt(powers.MagnetRemaining).ToString();
+            if (shieldTimerText && powers.ShieldActive)
+                shieldTimerText.text = Mathf.CeilToInt(powers.ShieldRemaining).ToString();
+        }
     }
 
-    private void SetGameplayUIVisible(bool show)
-    {
-        if (hideOnGameOver == null) return;
-        foreach (var go in hideOnGameOver)
-        {
-            if (!go) continue;
-            var cg = go.GetComponent<CanvasGroup>() ?? go.AddComponent<CanvasGroup>();
-            cg.alpha = show ? 1f : 0f;
-            cg.interactable = show;
-            cg.blocksRaycasts = show;
-        }
-    }
+    public void RefreshAll() => Update();
 }

@@ -9,11 +9,16 @@ public class PlayerController : MonoBehaviour
     [Header("Forever")]
     [SerializeField] private Runner runner;
 
-    [Header("Input")]
-    public float joystickSensitivity = 2f;
-    [Range(0f, 0.3f)] public float inputDeadZone = 0.08f;
+    [Header("Input (New Input System)")]
+    [Tooltip("Reference to Move (Vector2) action from your .inputactions")]
+    [SerializeField] private InputActionReference move;
+    [Tooltip("Reference to Jump (Button) action from your .inputactions")]
+    [SerializeField] private InputActionReference jump;
+    [SerializeField] private bool enableActions = true; 
 
     [Header("Lateral Move")]
+    public float joystickSensitivity = 2f;
+    [Range(0f, 0.3f)] public float inputDeadZone = 0.08f;
     [SerializeField] private float maxOffset = 5f;
     public float xSmoothTime = 0.10f;
     [SerializeField] private float xMaxSpeed = 100f;
@@ -30,7 +35,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private string hitTrigger = "Hit";
     [SerializeField] private float hitLockTime = 1.2f;
 
-    private RunController input;
+    
     private float addValue;
     private float targetX;
     private float xVel;
@@ -40,34 +45,48 @@ public class PlayerController : MonoBehaviour
 
     public bool ControlsLocked => controlsLocked;
 
-    private void Awake()
+    void Awake()
     {
         if (!runner) runner = GetComponent<Runner>();
         if (!anim) anim = GetComponentInChildren<Animator>();
-
-        input = new RunController();
-        input.Default.Move.performed += OnMove;
-        input.Default.Move.canceled += OnMove;
-        input.Default.Jump.performed += OnJump;
-
         targetX = runner ? runner.motion.offset.x : 0f;
     }
 
-    private void OnEnable() => input.Enable();
-    private void OnDisable() => input.Disable();
-
-    private void OnDestroy()
+    void OnEnable()
     {
-        input.Default.Move.performed -= OnMove;
-        input.Default.Move.canceled -= OnMove;
-        input.Default.Jump.performed -= OnJump;
-        input.Dispose();
+        if (move)
+        {
+            move.action.performed += OnMove;
+            move.action.canceled += OnMove;
+            if (enableActions) move.action.Enable();
+        }
+        if (jump)
+        {
+            jump.action.performed += OnJump;
+            if (enableActions) jump.action.Enable();
+        }
     }
 
-    private void Update()
+    void OnDisable()
+    {
+        if (move)
+        {
+            move.action.performed -= OnMove;
+            move.action.canceled -= OnMove;
+            if (enableActions) move.action.Disable();
+        }
+        if (jump)
+        {
+            jump.action.performed -= OnJump;
+            if (enableActions) jump.action.Disable();
+        }
+    }
+
+    void Update()
     {
         if (!runner) return;
 
+        
         if (!controlsLocked)
             targetX = Mathf.Clamp(targetX + addValue * Time.deltaTime, -maxOffset, maxOffset);
 
@@ -77,6 +96,7 @@ public class PlayerController : MonoBehaviour
 
         float newX = Mathf.SmoothDamp(curX, targetX, ref xVel, xSmoothTime, xMaxSpeed);
 
+        
         if (isJumping)
         {
             jumpT += Time.deltaTime / Mathf.Max(0.01f, jumpDuration);
@@ -90,8 +110,12 @@ public class PlayerController : MonoBehaviour
         }
 
         runner.motion.offset = new Vector2(newX, y);
+
+        
+        GameCore.Instance?.TickTime(Time.deltaTime);
     }
 
+    
     private void OnMove(InputAction.CallbackContext ctx)
     {
         var x = ctx.ReadValue<Vector2>().x;
@@ -107,6 +131,7 @@ public class PlayerController : MonoBehaviour
         jumpStartFx?.PlayFeedbacks();
     }
 
+    
     public void HitPause()
     {
         if (controlsLocked) return;
@@ -118,6 +143,7 @@ public class PlayerController : MonoBehaviour
     public void LockControls() => controlsLocked = true;
     public void UnlockControls() => controlsLocked = false;
 
+   
     public void ResetForRun(float startOffsetX = 0f)
     {
         addValue = 0f;
@@ -129,12 +155,11 @@ public class PlayerController : MonoBehaviour
 
         targetX = Mathf.Clamp(startOffsetX, -maxOffset, maxOffset);
 
-        
         if (anim)
         {
             anim.ResetTrigger(jumpTrigger);
             anim.ResetTrigger(hitTrigger);
-            anim.applyRootMotion = false; 
+            anim.applyRootMotion = false;
             anim.Rebind();
             anim.Update(0f);
         }

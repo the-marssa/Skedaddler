@@ -166,7 +166,7 @@ PlayerSettings:
     Android: com.DefaultCompany.Skedaddler
     Standalone: com.DefaultCompany.Skedaddler
     Tizen: 
-    iPhone: 
+    iPhone: com.DefaultCompany.Skedaddler
     tvOS: 
   buildNumber:
     Standalone: 0
@@ -629,6 +629,9 @@ PlayerSettings:
   - serializedVersion: 3
     m_BuildTarget: Android
     m_Formats: 01000000
+  - serializedVersion: 3
+    m_BuildTarget: iOS
+    m_Formats: 03000000
   playModeTestRunnerEnabled: 0
   runPlayModeTestAsEditModeTest: 0
   actionOnDotNetUnhandledException: 1
@@ -898,11 +901,11 @@ PlayerSettings:
     Android: UNITY_SOCIAL;DEBUG_ANALYTICS_STANDARD_EVENTS;UNITY_POST_PROCESSING_STACK_V2;DREAMTECK_SPLINES;MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
     Nintendo Switch: UNITY_POST_PROCESSING_STACK_V2
     PS4: UNITY_POST_PROCESSING_STACK_V2
-    Standalone: DEBUG_ANALYTICS_STANDARD_EVENTS;UNITY_POST_PROCESSING_STACK_V2;MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED;DREAMTECK_SPLINES
+    Standalone: DEBUG_ANALYTICS_STANDARD_EVENTS;UNITY_POST_PROCESSING_STACK_V2;MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED;DREAMTECK_SPLINES;STARTER_ASSETS_PACKAGES_CHECKED
     WebGL: UNITY_POST_PROCESSING_STACK_V2
     Windows Store Apps: UNITY_POST_PROCESSING_STACK_V2
     XboxOne: UNITY_POST_PROCESSING_STACK_V2
-    iPhone: UNITY_SOCIAL;DEBUG_ANALYTICS_STANDARD_EVENTS;UNITY_POST_PROCESSING_STACK_V2
+    iPhone: UNITY_SOCIAL;DEBUG_ANALYTICS_STANDARD_EVENTS;UNITY_POST_PROCESSING_STACK_V2;MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED;DREAMTECK_SPLINES
     tvOS: UNITY_POST_PROCESSING_STACK_V2
   additionalCompilerArguments: {}
   platformArchitecture:
@@ -1038,7 +1041,7 @@ PlayerSettings:
   qnxGraphicConfPath: 
   apiCompatibilityLevel: 3
   captureStartupLogs: {}
-  activeInputHandler: 1
+  activeInputHandler: 2
   windowsGamepadBackendHint: 0
   cloudProjectId: ed39d657-9c66-4ee2-bf01-a447cff49183
   framebufferDepthMemorylessMode: 0

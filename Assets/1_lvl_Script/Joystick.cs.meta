@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 67fff4c6f695944e6a602fb2d6f7a329
+guid: d3d0faf4ed7c0594e8e8f3c54acbfe17
 timeCreated: 1460690642
 licenseType: Store
 MonoImporter:
@@ -10,10 +10,3 @@ MonoImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 61516
-  packageName: OnScreenControls
-  packageVersion: 1.0
-  assetPath: Assets/OnScreenControls/Scripts/Joystick.cs
-  uploadId: 163151
