@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc3a344fb91b53245909503da4f4d1e5, type: 3}
+  m_Name: np
+  m_EditorClassIdentifier: 
+  skinId: np
+  displayName: 
+  preview: {fileID: 21300000, guid: 54dd4f3f98ef6e141ac589780b9438ea, type: 3}
+  preserveAspect: 1
+  price: 200
+  currencyIcon: {fileID: -1737005464, guid: a5e645d0b2507ac42807ef8e886f7d45, type: 3}

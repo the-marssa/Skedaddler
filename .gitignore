@@ -97,3 +97,6 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+Assets/ithappy.meta
+Assets/ithappy/Creative_Characters_FREE.meta
+Assets/ithappy/Creative_Characters_FREE/Render_Pipeline_Convert.meta
