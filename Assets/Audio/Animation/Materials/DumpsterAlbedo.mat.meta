@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 81540316453db8a4f8dd6a0ab1ffd6ca
+timeCreated: 1482140599
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 87901
+  packageName: Endless Runner - Sample Game
+  packageVersion: 1.97.1
+  assetPath: Assets/Animation/Materials/DumpsterAlbedo.mat
+  uploadId: 518529

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0a5c13d7ceb21954d9c5432b7a1f25bf
+timeCreated: 1464962780
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 87901
+  packageName: Endless Runner - Sample Game
+  packageVersion: 1.97.1
+  assetPath: Assets/Animation/Animators/Dog.controller
+  uploadId: 518529

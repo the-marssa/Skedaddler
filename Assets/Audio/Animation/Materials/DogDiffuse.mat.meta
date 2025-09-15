@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c192c23e20f275d40a8ce70385e24e69
+timeCreated: 1482140594
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 87901
+  packageName: Endless Runner - Sample Game
+  packageVersion: 1.97.1
+  assetPath: Assets/Animation/Materials/DogDiffuse.mat
+  uploadId: 518529

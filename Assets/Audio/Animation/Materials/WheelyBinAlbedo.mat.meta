@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 68f27c66510be3f4393ce4a6e7284ca0
+timeCreated: 1482140599
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 87901
+  packageName: Endless Runner - Sample Game
+  packageVersion: 1.97.1
+  assetPath: Assets/Animation/Materials/WheelyBinAlbedo.mat
+  uploadId: 518529

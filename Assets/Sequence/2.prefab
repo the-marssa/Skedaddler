@@ -1798,11 +1798,11 @@ MonoBehaviour:
     - {fileID: 4888559973150103662}
     _isRoot: 0
   bounds:
-    center: {x: 0.050699234, y: 11.325258, z: 4.500001}
-    extents: {x: 38.125908, y: 13.56826, z: 9.000001}
+    center: {x: 0.050699234, y: 11.32526, z: 4.500001}
+    extents: {x: 38.125908, y: 13.568258, z: 9.000001}
     max: {x: 38.176605, y: 24.893518, z: 13.500002}
-    min: {x: -38.075207, y: -2.2430017, z: -4.5}
-    size: {x: 76.251816, y: 27.13652, z: 18.000002}
+    min: {x: -38.075207, y: -2.2429986, z: -4.5}
+    size: {x: 76.251816, y: 27.136517, z: 18.000002}
   builders: []
   unpacked: 0
   alwaysDraw: 0
@@ -1827,18 +1827,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabs:
   - prefab: {fileID: 1091416861932012, guid: d11c03cec4369ea4aa3d29744046d625, type: 3}
-    weight: 0.6
+    weight: 0.356
   - prefab: {fileID: 2458404737753078205, guid: 35590398b83799c459fc888aa13e398d,
       type: 3}
-    weight: 0.15
+    weight: 0.01
   - prefab: {fileID: 7753728971606300541, guid: 7fdda124fffcc704a9186f3d2715dda1,
       type: 3}
-    weight: 0.1
+    weight: 0.063
   - prefab: {fileID: 659461991414771745, guid: 07f807ea802585d4088efc2be18db47b, type: 3}
-    weight: 0.08
+    weight: 0.037
   - prefab: {fileID: 3241196014341189734, guid: 327860819d06a964d98cea7acb224d6e,
       type: 3}
-    weight: 0.07
+    weight: 0
   pointsParent: {fileID: 5750499401535369073}
   spawnProbability: 1
   yOffset: 0.1
